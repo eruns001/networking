@@ -48,9 +48,9 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
     log('data: 2');
     StorageUploadTask uploadTask = storageReference.putFile(image);
 
-    StorageTaskSnapshot stragetask = await uploadTask.onComplete;
+    StorageTaskSnapshot strageTask = await uploadTask.onComplete;
     log('data: 3');
-    String downloadURL = await stragetask.ref.getDownloadURL();
+    String downloadURL = await strageTask.ref.getDownloadURL();
 
     log('data: 4');
     if(uploadTask.isComplete){
@@ -63,7 +63,6 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-
     //화면 크기 체크
     //디바이스 너비
     double _device_width = MediaQuery.of(context).size.width;
