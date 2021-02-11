@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
 
 import 'ForgotPasswordOrIdPage.dart';
+import 'LoginSelectPage.dart';
 
 //전역변수
 //searchTextEditingController
@@ -268,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ForgotPasswordOrIdPage();
+                      return LoginSelectPage();
                     },
                   ),
                 );
