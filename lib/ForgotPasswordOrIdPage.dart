@@ -19,7 +19,7 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
 
     return ListView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: ClampingScrollPhysics(),
       children: <Widget>[
         Container(
           padding: EdgeInsets.fromLTRB(_deviceWidth * 0.141, 0, 0, 0),
