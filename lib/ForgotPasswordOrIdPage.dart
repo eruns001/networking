@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/FindPasswordAuthenticationPage.dart';
 
 class ForgotPasswordOrIdPage extends StatefulWidget {
   ForgotPasswordOrIdPage({
@@ -17,7 +18,6 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
 
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
-
     return ListView(
       physics: ClampingScrollPhysics(),
       children: <Widget>[
@@ -116,7 +116,19 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
               ForgotPasswordOrIdButton(
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return FindPasswordAuthenticationPage(
+                          userName: _findPWNameController.text,
+                          userId: _findPWIdController.text,
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -128,13 +140,12 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
   /// 앱바 빌드 메서드
   Widget _buildAppBarTitle(double _deviceHeight, double _deviceWidth) {
     return Container(
-      color: Colors.white,
       margin: EdgeInsets.fromLTRB(_deviceWidth * 0.03, 0, 0, 0),
       width: _deviceWidth * 0.045,
       child: CupertinoButton(
         padding: EdgeInsets.zero,
         child: Image.asset(
-            'images/forgotPasswordOrId/forgotPasswordOrId_btn_close.png'),
+            'images/findPasswordAuthentication/findPasswordAuthentication_btn_close.png'),
         onPressed: () {
           Navigator.pop(context);
         },

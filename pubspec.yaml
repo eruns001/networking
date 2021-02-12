@@ -58,6 +58,7 @@ flutter:
     - images/search_btn_search.png
     - images/forgotPasswordOrId/
     - images/loginSelect/
+    - images/findPasswordAuthentication/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
