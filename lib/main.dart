@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
 
-import 'ForgotPasswordOrIdPage.dart';
-import 'LoginSelectPage.dart';
+import 'LoginLayoutPage.dart';
 
 //전역변수
 //searchTextEditingController
@@ -269,7 +268,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return LoginSelectPage();
+                      return LoginLayoutPage();
                     },
                   ),
                 );

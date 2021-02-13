@@ -1,23 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FindPasswordAuthenticationPage extends StatefulWidget {
-  FindPasswordAuthenticationPage({
+import 'NewPwPage.dart';
+
+/// 비밀번호 찾는 과정에서 이메일 인증하는 페이지
+
+class AuthenticationPage extends StatefulWidget {
+  const AuthenticationPage({
     Key key,
     @required this.userName,
-    @required this.userId,
+    //@required this.userId,
   }) : super(key: key);
 
   final String userName;
-  final String userId;
+
+  //final String userId;
 
   @override
-  _FindPasswordAuthenticationPageState createState() =>
-      _FindPasswordAuthenticationPageState();
+  _AuthenticationPageState createState() => _AuthenticationPageState();
 }
 
-class _FindPasswordAuthenticationPageState
-    extends State<FindPasswordAuthenticationPage> {
+class _AuthenticationPageState extends State<AuthenticationPage> {
   TextEditingController _authenticationNumController =
       new TextEditingController();
 
@@ -113,7 +116,7 @@ class _FindPasswordAuthenticationPageState
   }
 
   /// 앱바 빌드 메서드
-  Widget _buildTitle(double _deviceHeight, double _deviceWidth) {
+  Widget _buildAppBarTitle(double _deviceHeight, double _deviceWidth) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,8 +126,7 @@ class _FindPasswordAuthenticationPageState
             width: _deviceWidth * 0.045,
             child: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Image.asset(
-                  'images/findPasswordAuthentication/findPasswordAuthentication_btn_close.png'),
+              child: Image.asset('images/authentication_btn_close.png'),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -135,9 +137,17 @@ class _FindPasswordAuthenticationPageState
             width: _deviceWidth * 0.083,
             child: CupertinoButton(
               padding: EdgeInsets.zero,
-              child: Image.asset(
-                  'images/findPasswordAuthentication/findPasswordAuthentication_btn_next.png'),
-              onPressed: () {},
+              child: Image.asset('images/authentication_btn_next.png'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return NewPwPage();
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -154,9 +164,17 @@ class _FindPasswordAuthenticationPageState
       appBar: AppBar(
         leading: null,
         automaticallyImplyLeading: false,
+        toolbarHeight: _deviceHeight * 0.075,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: _buildTitle(_deviceHeight, _deviceWidth),
+        bottom: PreferredSize(
+          preferredSize: null,
+          child: Container(
+            height: 0.5,
+            color: Color.fromARGB(255, 67, 164, 210),
+          ),
+        ),
+        title: _buildAppBarTitle(_deviceHeight, _deviceWidth),
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );

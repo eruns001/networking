@@ -1,20 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/FindPasswordAuthenticationPage.dart';
 
-class ForgotPasswordOrIdPage extends StatefulWidget {
-  ForgotPasswordOrIdPage({
+import 'AuthenticationPage.dart';
+
+/// 로그인 선택화면에서 계정을 잊었을 경우 나오는 화면
+
+class FindIdPwPage extends StatefulWidget {
+  const FindIdPwPage({
     Key key,
   }) : super(key: key);
 
   @override
-  _ForgotPasswordOrIdPageState createState() => _ForgotPasswordOrIdPageState();
+  _FindIdPwPageState createState() => _FindIdPwPageState();
 }
 
-class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
+class _FindIdPwPageState extends State<FindIdPwPage> {
   TextEditingController _findAccountController = new TextEditingController();
   TextEditingController _findPWNameController = new TextEditingController();
-  TextEditingController _findPWIdController = new TextEditingController();
+  //TextEditingController _findPWIdController = new TextEditingController();
 
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
@@ -29,7 +32,7 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
             children: <Widget>[
               Container(
                 /// 계정찾기
-                margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.032, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.052, 0, 0),
                 //height: _deviceHeight * 0.016,
                 //width: _deviceWidth * 0.133,
                 child: Text(
@@ -39,13 +42,13 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                   ),
                 ),
               ),
-              ForgotPasswordOrIdInfo(
+              FindIdPwInfo(
                 /// 안내 문구
                 deviceHeight: _deviceHeight,
                 marginRatio: 0.021,
                 text: '사용자의 이름이나, 이메일을 입력해주세요.',
               ),
-              ForgotPasswordOrIdInputField(
+              FindIdPwInputField(
                 /// 입력 공간
                 controller: _findAccountController,
                 deviceHeight: _deviceHeight,
@@ -53,7 +56,7 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                 hint: '사용자의 이름, 또는 이메일',
                 onSubmitted: null,
               ),
-              ForgotPasswordOrIdButton(
+              FindIdPwButton(
                 /// 버튼
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
@@ -85,13 +88,13 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                   ),
                 ),
               ),
-              ForgotPasswordOrIdInfo(
+              FindIdPwInfo(
                 /// 안내 문구 1
                 deviceHeight: _deviceHeight,
                 marginRatio: 0.021,
                 text: '사용자의 이름이나, 이메일을 입력해주세요.',
               ),
-              ForgotPasswordOrIdInputField(
+              FindIdPwInputField(
                 /// 입력 공간 1
                 controller: _findPWNameController,
                 deviceHeight: _deviceHeight,
@@ -99,6 +102,7 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                 hint: '사용자의 이름, 또는 이메일',
                 onSubmitted: null,
               ),
+              /*
               ForgotPasswordOrIdInfo(
                 /// 안내 문구2
                 deviceHeight: _deviceHeight,
@@ -113,7 +117,8 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                 hint: '사용하고 있는 아이디',
                 onSubmitted: null,
               ),
-              ForgotPasswordOrIdButton(
+              */
+              FindIdPwButton(
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 onPressed: () {
@@ -121,9 +126,9 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return FindPasswordAuthenticationPage(
+                        return AuthenticationPage(
                           userName: _findPWNameController.text,
-                          userId: _findPWIdController.text,
+                          //userId: _findPWIdController.text,
                         );
                       },
                     ),
@@ -145,7 +150,7 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
       child: CupertinoButton(
         padding: EdgeInsets.zero,
         child: Image.asset(
-            'images/findPasswordAuthentication/findPasswordAuthentication_btn_close.png'),
+            'images/findIdPw_btn_close.png'),
         onPressed: () {
           Navigator.pop(context);
         },
@@ -164,6 +169,13 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.075,
         elevation: 0,
+        bottom: PreferredSize(
+          preferredSize: null,
+          child: Container(
+            height: 0.5,
+            color: Color.fromARGB(255, 67, 164, 210),
+          ),
+        ),
         title: _buildAppBarTitle(_deviceHeight, _deviceWidth),
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
@@ -171,8 +183,8 @@ class _ForgotPasswordOrIdPageState extends State<ForgotPasswordOrIdPage> {
   }
 }
 
-class ForgotPasswordOrIdInputField extends StatelessWidget {
-  const ForgotPasswordOrIdInputField({
+class FindIdPwInputField extends StatelessWidget {
+  const FindIdPwInputField({
     Key key,
     @required this.controller,
     @required this.deviceHeight,
@@ -212,8 +224,8 @@ class ForgotPasswordOrIdInputField extends StatelessWidget {
   }
 }
 
-class ForgotPasswordOrIdInfo extends StatelessWidget {
-  const ForgotPasswordOrIdInfo({
+class FindIdPwInfo extends StatelessWidget {
+  const FindIdPwInfo({
     Key key,
     @required this.deviceHeight,
     @required this.marginRatio,
@@ -239,8 +251,8 @@ class ForgotPasswordOrIdInfo extends StatelessWidget {
   }
 }
 
-class ForgotPasswordOrIdButton extends StatelessWidget {
-  const ForgotPasswordOrIdButton({
+class FindIdPwButton extends StatelessWidget {
+  const FindIdPwButton({
     Key key,
     @required this.deviceHeight,
     @required this.deviceWidth,

@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/ForgotPasswordOrIdPage.dart';
 
-class LoginSelectPage extends StatefulWidget {
-  const LoginSelectPage({Key key}) : super(key: key);
+import 'FindIdPwPage.dart';
+import 'SignUpPage.dart';
+
+class LoginLayoutPage extends StatefulWidget {
+  const LoginLayoutPage({Key key}) : super(key: key);
 
   @override
-  _LoginSelectPageState createState() => _LoginSelectPageState();
+  _LoginLayoutPageState createState() => _LoginLayoutPageState();
 }
 
-class _LoginSelectPageState extends State<LoginSelectPage> {
+class _LoginLayoutPageState extends State<LoginLayoutPage> {
   /// 페이지 내용 빌드 메서드
   Widget _buildPage() {
     final double _deviceHeight = MediaQuery.of(context).size.height;
@@ -24,7 +26,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
           Container(
             /// 로고
             width: _deviceWidth * 0.571,
-            child: Image.asset('images/loginSelect/loginSelect_logo.png'),
+            child: Image.asset('images/loginLayout_logo.png'),
           ),
           Container(
             /// 로그인 버튼
@@ -72,7 +74,16 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
                   fontSize: 20,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return SignUpPage();
+                    },
+                  ),
+                );
+              },
             ),
           ),
           Container(
@@ -92,7 +103,7 @@ class _LoginSelectPageState extends State<LoginSelectPage> {
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return ForgotPasswordOrIdPage();
+                      return FindIdPwPage();
                     },
                   ),
                 );
