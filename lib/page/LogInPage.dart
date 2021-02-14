@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LogInPage extends StatefulWidget {
   @override
@@ -27,6 +28,21 @@ class _LogInState extends State<LogInPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              margin: new EdgeInsets.only(bottom: _device_height*(20/100)),
+              child: SignInButton(
+                Buttons.Google,
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+Container(
               margin: new EdgeInsets.only(bottom: _device_height*(2/100)),
               child: FlatButton(
                 onPressed: null,
@@ -62,9 +78,4 @@ class _LogInState extends State<LogInPage> {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+* */
