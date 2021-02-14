@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
@@ -5,8 +7,13 @@ import 'package:networking/UploadQuestionPage.dart';
 //전역변수
 //searchTextEditingController
 TextEditingController searchTextEditingController = TextEditingController();
+int aa = 0;
 
 void main() {
+  if(aa == 0){
+    log("build test");
+    aa++;
+  }
   runApp(MyApp());
 }
 
