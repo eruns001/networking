@@ -170,7 +170,7 @@ class NewPwTemplate extends StatelessWidget {
         children: <Widget>[
           Container(
             child: Text(
-              '비밀번호',
+              text,
               style: TextStyle(
                 fontSize: 10,
               ),
