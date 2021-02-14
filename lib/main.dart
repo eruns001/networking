@@ -144,10 +144,10 @@ class _MyHomePageState extends State<MyHomePage> {
       body: IndexedStack(
         index: _currentIndex,
         children: <Widget>[
-          Center(
+          Container(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -262,12 +262,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            //btn_home
             IconButton(
               iconSize: 50,
               color: const Color(0xff46abdb),
               icon: new Image.asset('images/search_btn_home.png'),
               onPressed: (){
-                _currentIndex = 1;
+                _currentIndex = 0;
                 setState(() {});
               },
             ),
