@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
+import 'package:networking/page/LogInPage.dart';
 
 //전역변수
 //searchTextEditingController
@@ -55,6 +56,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String dropdownValue = 'One';
+
+  int _currentIndex = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -139,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
             )),
       ),
       body: IndexedStack(
+        index: _currentIndex,
         children: <Widget>[
           Center(
             child: SingleChildScrollView(
@@ -249,7 +253,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-          )
+          ),
+          UploadQuestionPage()
         ],
       ),
       bottomNavigationBar: Container(
@@ -261,12 +266,21 @@ class _MyHomePageState extends State<MyHomePage> {
               iconSize: 50,
               color: const Color(0xff46abdb),
               icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: null,
+              onPressed: (){
+                _currentIndex = 1;
+                setState(() {});
+              },
             ),
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_insert_user.png'),
-              onPressed: null,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LogInPage()),
+                  );
+                },
             ),
             IconButton(
               iconSize: 50,

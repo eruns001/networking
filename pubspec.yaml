@@ -56,6 +56,10 @@ flutter:
     - images/search_btn_insert_user.png
     - images/search_btn_mypage.png
     - images/search_btn_search.png
+    - images/loginpage_background.png
+    - images/loginpage_btn_Login.png
+    - images/loginpage_btn_NewAccount.png
+    - images/loginpage_btn_FindAccount.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
