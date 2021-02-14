@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
 import 'package:networking/page/LogInPage.dart';
 
+import 'LoginLayoutPage.dart';
+
 //전역변수
 //searchTextEditingController
 TextEditingController searchTextEditingController = TextEditingController();
@@ -82,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
         child: AppBar(
+            brightness: Brightness.light,
             centerTitle: true,
             titleSpacing: -5,
             backgroundColor: Colors.white.withOpacity(0.0),
@@ -233,7 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onChanged: (String newValue) {
                           setState(
-                                () {
+                            () {
                               dropdownValue = newValue;
                             },
                           );
@@ -286,7 +289,17 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_search.png'),
-              onPressed: null,
+              onPressed: () {
+              /// 계정찾기 페이지 테스트용으로 추가
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return LoginLayoutPage();
+                    },
+                  ),
+                );
+              },
             ),
             IconButton(
               iconSize: 50,
