@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "993827766623-eihn213sk5e5t5lkphq3ii9s40sfrg0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.networking",
+            "certificate_hash": "7e3a7705cf1180d8b978a9c009615244b517546a"
+          }
+        },
+        {
           "client_id": "993827766623-rg0cu362jnujaklpjat1gs79vp1nqap7.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "993827766623-rg0cu362jnujaklpjat1gs79vp1nqap7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "993827766623-6b25kd2qu95j6qgjclpmbn9t13ttrf0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juhwan976.networking"
+              }
             }
           ]
         }
@@ -58,6 +73,13 @@
             {
               "client_id": "993827766623-rg0cu362jnujaklpjat1gs79vp1nqap7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "993827766623-6b25kd2qu95j6qgjclpmbn9t13ttrf0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juhwan976.networking"
+              }
             }
           ]
         }
@@ -87,6 +109,13 @@
             {
               "client_id": "993827766623-rg0cu362jnujaklpjat1gs79vp1nqap7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "993827766623-6b25kd2qu95j6qgjclpmbn9t13ttrf0g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juhwan976.networking"
+              }
             }
           ]
         }
