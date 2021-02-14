@@ -1,14 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/UploadQuestionPage.dart';
+import 'package:networking/page/LogInPage.dart';
 
 import 'LoginLayoutPage.dart';
 
 //전역변수
 //searchTextEditingController
 TextEditingController searchTextEditingController = TextEditingController();
+int aa = 0;
 
 void main() {
+  if(aa == 0){
+    log("build test");
+    aa++;
+  }
   runApp(MyApp());
 }
 
@@ -50,6 +58,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String dropdownValue = 'One';
+
+  int _currentIndex = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -135,11 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
             )),
       ),
       body: IndexedStack(
+        index: _currentIndex,
         children: <Widget>[
-          Center(
+          Container(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -245,7 +256,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
-          )
+          ),
+          UploadQuestionPage()
         ],
       ),
       bottomNavigationBar: Container(
@@ -253,17 +265,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            //btn_home
             IconButton(
               iconSize: 50,
               color: const Color(0xff46abdb),
               icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: null,
+              onPressed: (){
+                _currentIndex = 0;
+                setState(() {});
+              },
             ),
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_insert_user.png'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LogInPage()),
+                  );
+                },
+            ),
+            IconButton(
+              iconSize: 50,
+              icon: new Image.asset('images/search_btn_search.png'),
               onPressed: () {
-                /// 계정찾기 페이지 테스트용으로 추가
+              /// 계정찾기 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -273,11 +300,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
               },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_search.png'),
-              onPressed: null,
             ),
             IconButton(
               iconSize: 50,
