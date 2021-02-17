@@ -197,6 +197,7 @@ class _CommunityPageState extends State<CommunityPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,
+        elevation: 0.0,
         leading: null,
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.073,
