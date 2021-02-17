@@ -2,10 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/UploadQuestionPage.dart';
+import 'package:networking/page/UploadQuestionPage.dart';
 import 'package:networking/page/LogInPage.dart';
 
-import 'LoginLayoutPage.dart';
+import 'page/CommunityPage.dart';
+import 'page/LoginLayoutPage.dart';
 
 //전역변수
 //searchTextEditingController
@@ -304,7 +305,17 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_mypage.png'),
-              onPressed: null,
+              onPressed: () {
+                /// 커뮤니티 페이지 테스트용으로 추가
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return CommunityPage();
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
