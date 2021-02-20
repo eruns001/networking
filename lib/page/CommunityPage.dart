@@ -226,7 +226,11 @@ class _CommunityPageState extends State<CommunityPage> {
           margin: EdgeInsets.fromLTRB(_deviceWidth * 0.105, 0, 0, 0),
           height: _deviceHeight * 0.041,
           width: _deviceWidth * 0.101,
-          color: Colors.blue,
+          child: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Image.asset('images/community_btn_menu.png'),
+            onPressed: () {},
+          ),
         ),
         Expanded(
           child: Container(
@@ -244,7 +248,11 @@ class _CommunityPageState extends State<CommunityPage> {
               _deviceWidth * 0.02, 0, _deviceWidth * 0.111, 0),
           height: _deviceHeight * 0.041,
           width: _deviceWidth * 0.075,
-          color: Colors.blue,
+          child: CupertinoButton(
+            padding: EdgeInsets.zero,
+            child: Image.asset('images/community_btn_alarm.png'),
+            onPressed: () {},
+          ),
         ),
       ],
     );
