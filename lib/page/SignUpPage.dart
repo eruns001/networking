@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:networking/data/data.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({
@@ -12,6 +14,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _pwController = new TextEditingController();
   TextEditingController _pwConfirmController = new TextEditingController();
@@ -216,7 +219,14 @@ class _SignUpPageState extends State<SignUpPage> {
             child: CupertinoButton(
               padding: EdgeInsets.zero,
               child: Image.asset('images/signUp_btn_next.png'),
-              onPressed: () {},
+              onPressed: () async{
+                String document = uid;
+                await Firestore.instance.collection('Account').document(document).setData({
+                  'nickName': _nickNameController.text,
+                  'name': _nameController.text,
+                  'birth':_birthController.text
+                });
+              },
             ),
           ),
         ],
