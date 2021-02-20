@@ -28,3 +28,41 @@ Future<bool> googleSingIn () async{
     //https://youtu.be/LLmg_n-EdWg?t=658
   }
 }
+
+Future<bool> signin(String email, String password) async {
+  try{
+    AuthResult result = await auth.createUserWithEmailAndPassword(email: email, password: password);
+    //FirebaseUser user = result.user;
+
+    return Future.value(true);
+  } catch(e){
+    switch(e.code){
+      case 'ERROR_INVALID_EMAIL':
+        print('error_signin : ERROR_INVALID_EMAIL');
+    }
+  }
+}
+
+Future<bool> signup(String email, String password) async {
+  try{
+    AuthResult result = await auth.signInWithEmailAndPassword(email: email, password: password);
+    //FirebaseUser user = result.user;
+
+    return Future.value(true);
+  } catch(e){
+    switch(e.code){
+      case 'ERROR_EMAIL_ALREADY_IN_USE':
+        print('error_signup : ERROR_EMAIL_ALREADY_IN_USE');
+    }
+  }
+}
+
+Future<bool> signOutUser() async {
+  FirebaseUser user = await auth.currentUser();
+  if(user.providerData[1].providerId == 'google.com'){
+    await gooleSignIn.disconnect();
+  }
+  await auth.signOut();
+
+  return Future.value(false);
+}
