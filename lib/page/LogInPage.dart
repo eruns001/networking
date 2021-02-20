@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:networking/data/function.dart';
+import 'package:networking/page/SignUpPage.dart';
+import 'package:networking/page/SigninTaskPage.dart';
+
+import '../main.dart';
 
 class LogInPage extends StatefulWidget {
   @override
@@ -7,6 +13,10 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInState extends State<LogInPage> {
+
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
     //디바이스 너비
@@ -28,21 +38,6 @@ class _LogInState extends State<LogInPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: new EdgeInsets.only(bottom: _device_height*(20/100)),
-              child: SignInButton(
-                Buttons.Google,
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/*
-Container(
               margin: new EdgeInsets.only(bottom: _device_height*(2/100)),
               child: FlatButton(
                 onPressed: null,
@@ -67,7 +62,26 @@ Container(
               ),
             ),
             Container(
-              margin: new EdgeInsets.only(bottom: _device_height*(15/100)),
+              margin: new EdgeInsets.only(bottom: _device_height*(2/100)),
+              child: SignInButton(
+                Buttons.Google,
+                onPressed: () async{
+                  var booltemp = false;
+                  googleSingIn().whenComplete(() async {
+                    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+                    if(user != null)
+                      {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignUpPage()));
+                      }
+                    else{
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
+                    }
+                  });
+                },
+              ),
+            ),
+            Container(
+              margin: new EdgeInsets.only(bottom: _device_height*(10/100)),
               child: FlatButton(
                 onPressed: null,
                 child: Image.asset(
@@ -78,4 +92,10 @@ Container(
                 ),
               ),
             ),
-* */
+
+          ],
+        ),
+      ),
+    );
+  }
+}

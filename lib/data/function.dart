@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:networking/data/data.dart';
 
-FirebaseAuth auth = FirebaseAuth.instance;
-final gooleSignIn = GoogleSignIn();
+
 
 Future<bool> googleSingIn () async{
   GoogleSignInAccount googleSignInAccount = await gooleSignIn.signIn();
@@ -21,9 +21,9 @@ Future<bool> googleSingIn () async{
     AuthResult result = await auth.signInWithCredential(credential);
 
     FirebaseUser user = await auth.currentUser();
-    log("user.uid : ${user.uid}");
+    print("user.uid : ${user.uid}");
+    uid = user.uid;
     return Future.value(true);
-
     //집가자.
     //https://youtu.be/LLmg_n-EdWg?t=658
   }
@@ -63,6 +63,18 @@ Future<bool> signOutUser() async {
     await gooleSignIn.disconnect();
   }
   await auth.signOut();
-
   return Future.value(false);
 }
+
+Future<bool> WithdrawalUser() async {
+  FirebaseUser user = await auth.currentUser();
+
+  user.delete();
+  if(user.providerData[1].providerId == 'google.com'){
+    await gooleSignIn.disconnect();
+  }
+  await auth.signOut();
+  user = null;
+  return Future.value(false);
+}
+

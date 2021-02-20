@@ -30,6 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              /*
               Container(
                 /// 회원가입
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.052, 0, 0),
@@ -73,6 +74,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 hint: '********',
                 onSubmitted: (String string) {},
               ),
+              */
               SignUpTemplate(
                 /// 닉네임
                 controller: _nickNameController,
