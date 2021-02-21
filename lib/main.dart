@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/page/UploadQuestionPage.dart';
 import 'package:networking/page/LogInPage.dart';
+import 'package:networking/page/UploadQuestionPage.dart';
 
-import 'page/CommunityPage.dart';
 import 'page/LoginLayoutPage.dart';
+import 'page/TeamConfigPage.dart';
 
 //전역변수
 //searchTextEditingController
@@ -14,7 +14,7 @@ TextEditingController searchTextEditingController = TextEditingController();
 int aa = 0;
 
 void main() {
-  if(aa == 0){
+  if (aa == 0) {
     log("build test");
     aa++;
   }
@@ -271,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
               iconSize: 50,
               color: const Color(0xff46abdb),
               icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: (){
+              onPressed: () {
                 _currentIndex = 0;
                 setState(() {});
               },
@@ -279,19 +279,19 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_insert_user.png'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LogInPage()),
-                  );
-                },
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LogInPage()),
+                );
+              },
             ),
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_search.png'),
               onPressed: () {
-              /// 계정찾기 페이지 테스트용으로 추가
+                /// 계정찾기 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -306,12 +306,24 @@ class _MyHomePageState extends State<MyHomePage> {
               iconSize: 50,
               icon: new Image.asset('images/search_btn_mypage.png'),
               onPressed: () {
+                /*
                 /// 커뮤니티 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) {
                       return CommunityPage();
+                    },
+                  ),
+                );
+                 */
+
+                /// 팀 설정 페이지 테스트용으로 추가
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return TeamConfigPage();
                     },
                   ),
                 );

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-/// 당겨서 데이터 더 가져오기 기능 구현해야함.
-
 class CommunityPage extends StatefulWidget {
   const CommunityPage({
     Key key,
