@@ -220,11 +220,13 @@ class _SignUpPageState extends State<SignUpPage> {
               padding: EdgeInsets.zero,
               child: Image.asset('images/signUp_btn_next.png'),
               onPressed: () async{
-                String document = uid;
+                String document = "Account_$uid";
+                print("nickname : ${_nickNameController.text}");
                 await Firestore.instance.collection('Account').document(document).setData({
                   'nickName': _nickNameController.text,
                   'name': _nameController.text,
-                  'birth':_birthController.text
+                  'birth':_birthController.text,
+
                 });
               },
             ),
