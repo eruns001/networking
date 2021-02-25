@@ -13,6 +13,8 @@ import 'dart:io';
 
 import 'SearchPage.dart';
 
+///게시글 작성 페이지
+
 class UploadQuestionPage extends StatefulWidget {
   @override
   _UploadQuestionState createState() => _UploadQuestionState();
@@ -21,7 +23,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
 
   int _counter = 0;
 
-  var _image = null;
+  var _image;
   Widget temp_1st = UQP_icon_1st;
   FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   FirebaseUser _user;
@@ -35,7 +37,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
   }
   void _prepareService() async {
     _user = await _firebaseAuth.currentUser();
-    log('data: ${_user.uid}');
+    print('data: $uid');
   }
 
   Future _getImage() async{
@@ -44,21 +46,19 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
       _image = image;
       temp_1st = Image.file(_image, );
     });
-    log('data: 1');
-    StorageReference storageReference = _firebaseStorage.ref().child('test').child('path${_counter}.jpg');
-    _counter ++;
-    log('data: 2');
-    StorageUploadTask uploadTask = storageReference.putFile(image);
 
+    StorageReference storageReference = _firebaseStorage.ref()
+        .child('UploadQuestion')
+        .child('${dateFormat.format(DateTime.now())}_${uid}_No$_counter.jpg');
+    _counter ++;
+
+    StorageUploadTask uploadTask = storageReference.putFile(image);
     StorageTaskSnapshot strageTask = await uploadTask.onComplete;
-    log('data: 3');
     String downloadURL = await strageTask.ref.getDownloadURL();
 
-    log('data: 4');
     if(uploadTask.isComplete){
       setState(() {
         _downloadURL = downloadURL;
-        log('data: 5');
       });
     }
   }

@@ -7,6 +7,8 @@ import 'package:networking/page/SigninTaskPage.dart';
 
 import '../main.dart';
 
+///로그인화면
+
 class LogInPage extends StatefulWidget {
   @override
   _LogInState createState() => _LogInState();

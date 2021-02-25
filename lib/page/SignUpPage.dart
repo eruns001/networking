@@ -3,6 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:networking/data/data.dart';
+import 'package:networking/data/function.dart';
+import 'package:networking/widget/net_Container.dart';
+
+///구글 연계 로그인 후 firebase에 집어넣을 개인정보 입력하는 페이지
+///프로필사진
+///닉네임
+///이름
+///연락처
+///주소
+///이메일
+///분야
+///역활
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({
@@ -14,13 +26,26 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  TextEditingController _emailController = new TextEditingController();
-  TextEditingController _pwController = new TextEditingController();
-  TextEditingController _pwConfirmController = new TextEditingController();
+  // TextEditingController _emailController = new TextEditingController();
+  // TextEditingController _pwController = new TextEditingController();
+  // TextEditingController _pwConfirmController = new TextEditingController();
+
+  var _signupimage;
+  Widget _signupImageWidget = UQP_icon_1st;
+  String _signupImageURL;
   TextEditingController _nickNameController = new TextEditingController();
   TextEditingController _nameController = new TextEditingController();
+  TextEditingController _contactController = new TextEditingController();
+  String _addressController = '서울특별시';
+  TextEditingController _emailController = new TextEditingController();
+
   TextEditingController _birthController = new TextEditingController();
   bool _agree = false;
+
+
+  ///안쓰는 변수
+  TextEditingController _pwController = new TextEditingController();
+  TextEditingController _pwConfirmController = new TextEditingController();
 
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
@@ -32,9 +57,8 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              /*
+              /// 회원가입
               Container(
-                /// 회원가입
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.052, 0, 0),
                 child: Text(
                   '회원가입',
@@ -43,17 +67,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
-              SignUpTemplate(
-                /// 이메일
-                controller: _emailController,
-                deviceHeight: _deviceHeight,
-                deviceWidth: _deviceWidth,
-                topMarginRatio: 0.03,
-                textInputType: TextInputType.emailAddress,
-                text: '이메일',
-                hint: 'Ex) @GMAIL.COM',
-                onSubmitted: (String string) {},
-              ),
+              /*
               SignUpTemplate(
                 /// 비밀번호
                 controller: _pwController,
@@ -77,8 +91,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 onSubmitted: (String string) {},
               ),
               */
+              net_Container(
+                child: IconButton(
+                  icon: _signupImageWidget,
+                  onPressed: () async{
+                    network_function_getImage('SingIn', 0);
+                  },
+                ),
+                margin: new EdgeInsets.symmetric(horizontal: _deviceWidth * (0.9/100)),
+                net_width: _deviceWidth * (24.9/100),
+                net_height: _deviceHeight * (12.1/100),
+                radius: UQP_radius_picadd,
+              ),
+              /// 닉네임
               SignUpTemplate(
-                /// 닉네임
                 controller: _nickNameController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
@@ -88,8 +114,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 hint: '닉네임을 작성해주세요',
                 onSubmitted: (String string) {},
               ),
+              /// 이름
               SignUpTemplate(
-                /// 이름
                 controller: _nameController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
@@ -99,8 +125,19 @@ class _SignUpPageState extends State<SignUpPage> {
                 hint: '이름을 작성해주세요',
                 onSubmitted: (String string) {},
               ),
+              /// 이메일
               SignUpTemplate(
-                /// 생년월일
+                controller: _emailController,
+                deviceHeight: _deviceHeight,
+                deviceWidth: _deviceWidth,
+                topMarginRatio: 0.03,
+                textInputType: TextInputType.emailAddress,
+                text: '이메일',
+                hint: 'Ex) @GMAIL.COM',
+                onSubmitted: (String string) {},
+              ),
+              /// 생년월일
+              SignUpTemplate(
                 controller: _birthController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
@@ -111,8 +148,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 hint: 'EX) 951010',
                 onSubmitted: (String string) {},
               ),
+              /// 주소
               Container(
-                /// 주소
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.014, 0, 0),
                 child: Row(
                   children: <Widget>[
@@ -122,15 +159,24 @@ class _SignUpPageState extends State<SignUpPage> {
                     Container(
                       margin: EdgeInsets.fromLTRB(_deviceWidth * 0.05, 0, 0, 0),
                       child: DropdownButton(
-                        items: [
-                          DropdownMenuItem(
-                            child: Text('test'),
-                          ),
-                        ],
-                        onChanged: (value) {},
+                        value: _addressController,
+                        items: addressList.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _addressController = newValue;
+                          });
+                        },
                       ),
                     ),
-                    Container(child: Text('시')),
+                    Container(
+                        child: Text('시/도')
+                    ),
+                    /*
                     Container(
                       margin: EdgeInsets.fromLTRB(_deviceWidth * 0.05, 0, 0, 0),
                       child: DropdownButton(
@@ -144,12 +190,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     Container(
                       child: Text('도'),
-                    ),
+                    ),*/
                   ],
                 ),
               ),
+              /// 약관
               Container(
-                /// 약관
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.03, 0, 0),
                 height: _deviceHeight * 0.12,
                 width: _deviceWidth * 0.725,
@@ -160,8 +206,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
+              /// 개인정보 수집 동의
               Container(
-                /// 개인정보 수집 동의
                 margin: EdgeInsets.fromLTRB(0, 0, 0, _deviceHeight * 0.08),
                 child: Row(
                   children: <Widget>[
@@ -201,6 +247,8 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+
+          ///X버튼
           Container(
             margin: EdgeInsets.fromLTRB(_deviceWidth * 0.03, 0, 0, 0),
             width: _deviceWidth * 0.045,
@@ -212,6 +260,8 @@ class _SignUpPageState extends State<SignUpPage> {
               },
             ),
           ),
+
+          ///다음 버튼
           Container(
             height: _deviceHeight * 0.019,
             width: _deviceWidth * 0.083,
@@ -219,18 +269,18 @@ class _SignUpPageState extends State<SignUpPage> {
               padding: EdgeInsets.zero,
               child: Image.asset('images/signUp_btn_next.png'),
               onPressed: () async {
+                IsLogIn = true;
+                //firebase에 입력
                 String document = "Account_$uid";
                 print("nickname : ${_nickNameController.text}");
-                await Firestore.instance
-                    .collection('Account')
-                    .document(document)
-                    .setData(
-                  {
-                    'nickName': _nickNameController.text,
-                    'name': _nameController.text,
-                    'birth': _birthController.text,
-                  },
-                );
+                await Firestore.instance.collection('Account').document(document).setData({
+                  'nickName': _nickNameController.text,
+                  'name': _nameController.text,
+                  'birth':_birthController.text,
+                  'address':_addressController,
+                  'e_mail':_emailController.text,
+                });
+                Navigator.pop(context);
               },
             ),
           ),
