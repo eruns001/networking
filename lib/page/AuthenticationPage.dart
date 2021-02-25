@@ -162,6 +162,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         leading: null,
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.075,

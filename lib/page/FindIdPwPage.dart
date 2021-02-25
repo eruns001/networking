@@ -165,9 +165,11 @@ class _FindIdPwPageState extends State<FindIdPwPage> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.075,
+        centerTitle: false,
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: null,

@@ -11,6 +11,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../main.dart';
 import 'dart:io';
 
+import 'SearchPage.dart';
+
 class UploadQuestionPage extends StatefulWidget {
   @override
   _UploadQuestionState createState() => _UploadQuestionState();
@@ -281,7 +283,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
           ),
         ),
       ),
-
+      /*
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(bottom: 10),
         child: Row(
@@ -307,6 +309,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
           ],
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.
+       */
     );
   }
 }

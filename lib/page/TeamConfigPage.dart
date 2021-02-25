@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/widget/NetworkingAppBar.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// 위젯을 하나 만들었는데, Stateful 로 하는것이 귀찮아서 Function 을 받아서 거기에
-/// setState 를 넣는쪽으로 했는데, 불필요한 반복이 너무 많아서 Stateful 로 바꿀까 고민중.
+import 'package:networking/data/class/Member.dart';
+import 'package:networking/data/class/Team.dart';
 
 class TeamConfigPage extends StatefulWidget {
   const TeamConfigPage({Key key}) : super(key: key);
@@ -174,46 +175,6 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
     );
   }
 
-  /// 앱바 빌드 메서드
-  Widget _buildTitle(double _deviceHeight, double _deviceWidth) {
-    return Row(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.fromLTRB(_deviceWidth * 0.105, 0, 0, 0),
-          height: _deviceHeight * 0.041,
-          width: _deviceWidth * 0.101,
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Image.asset('images/community_btn_menu.png'),
-            onPressed: () {},
-          ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              'MY TEAM',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              _deviceWidth * 0.02, 0, _deviceWidth * 0.111, 0),
-          height: _deviceHeight * 0.041,
-          width: _deviceWidth * 0.075,
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Image.asset('images/community_btn_alarm.png'),
-            onPressed: () {},
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -230,16 +191,10 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
     final _deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        elevation: 0.0,
-        leading: null,
-        automaticallyImplyLeading: false,
-        toolbarHeight: _deviceHeight * 0.073,
-        centerTitle: true,
-        titleSpacing: 0,
-        title: _buildTitle(_deviceHeight, _deviceWidth),
+      appBar: NetworkingAppBar(
+        deviceHeight: _deviceHeight,
+        deviceWidth: _deviceWidth,
+        title: 'My TEAM',
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );
@@ -861,45 +816,3 @@ class TeamConfigTemplate extends StatelessWidget {
   }
 }
 
-/// 팀의 정보를 담을 클래스
-class Team {
-  /// 팀 이름
-  String teamName;
-
-  /// 주제
-  String subject;
-
-  /// 기획
-  List<Member> planning = new List<Member>();
-
-  /// 디자인
-  List<Member> design = new List<Member>();
-
-  /// 마케팅
-  List<Member> marketing = new List<Member>();
-
-  /// 개발
-  List<Member> development = new List<Member>();
-}
-
-/// 팀에 들어갈 멤버들을 저장할 클래스
-class Member {
-  /// 멤버 이름
-  String name;
-
-  /// 멤버 연락처
-  String phoneNum;
-
-  /// 멤버 포지션
-  String position;
-
-  /// 멤버 이메일
-  String email;
-
-  Member({
-    @required this.name,
-    @required this.phoneNum,
-    @required this.position,
-    @required this.email,
-  });
-}
