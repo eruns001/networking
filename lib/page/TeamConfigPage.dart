@@ -157,6 +157,7 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                       _team.marketing = _marketingController.value;
                     if (_developmentController.value != null)
                       _team.development = _developmentController.value;
+                    _team.anniversary = DateTime.now();
 
                     print(_team.teamName);
                     print(_team.subject);
@@ -165,6 +166,7 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                     print('marketing : ' + _team.marketing.length.toString());
                     print(
                         'development : ' + _team.development.length.toString());
+                    print('anniversary : ' + _team.anniversary.toString());
                   },
                 ),
               ),

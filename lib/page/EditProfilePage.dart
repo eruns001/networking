@@ -17,20 +17,13 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  TextEditingController _nickNameController;
-  TextEditingController _nameController;
-  TextEditingController _phoneNumController;
-  TextEditingController _emailController;
+  TextEditingController _nickNameController = new TextEditingController();
+  TextEditingController _nameController = new TextEditingController();
+  TextEditingController _phoneNumController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
 
   /// 페이지 내용을 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
-    _nickNameController =
-        new TextEditingController(text: widget._user.getNickName);
-    _nameController = new TextEditingController(text: widget._user.getName);
-    _phoneNumController =
-        new TextEditingController(text: widget._user.getPhoneNum);
-    _emailController = new TextEditingController(text: widget._user.getEmail);
-
     EdgeInsets _contentPadding =
         EdgeInsets.fromLTRB(_deviceWidth * 0.035, 0, 0, 0);
 
@@ -58,7 +51,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       height: _deviceHeight * 0.022,
                       child: Icon(Icons.close),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
                   ),
                 ),
 
@@ -69,7 +64,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: CupertinoButton(
                     padding: EdgeInsets.zero,
                     child: Text('저장'),
-                    onPressed: () {},
+                    onPressed: () {
+                      widget._user.setNickName = _nickNameController.text;
+                      widget._user.setName = _nameController.text;
+                      widget._user.setPhoneNum = _phoneNumController.text;
+                      widget._user.setEmail = _emailController.text;
+
+                      Navigator.pop(context, true);
+                    },
                   ),
                 ),
               ],
@@ -228,6 +230,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _nickNameController.text = widget._user.getNickName;
+    _nameController.text = widget._user.getName;
+    _phoneNumController.text = widget._user.getPhoneNum;
+    _emailController.text = widget._user.getEmail;
   }
 
   @override

@@ -32,6 +32,12 @@ class User {
   String _addressCi;
   String _addressGoon;
 
+  /// 팀에 속해 있는지
+  bool _isJoinedTeam = false;
+
+  /// 팀을 만든 사람인지
+  bool _isMaster = false;
+
   /// 포트폴리오 추가 필요
   /// 한줄 평 추가 필요 Post 를 확장해서 사용하면 될 듯.
 
@@ -47,6 +53,8 @@ class User {
   set setPosition(String position) => {_position = position};
   set setAddressCi(String addressCi) => {_addressCi = addressCi};
   set setAddressGoon(String addressGoon) => {_addressGoon = addressGoon};
+  set setIsJoinedTeam(bool isJoinedTeam) => {_isJoinedTeam = isJoinedTeam};
+  set setIsMaster(bool isMaster) => {_isMaster = isMaster};
 
   /// getter
   get getProfileImage => _image;
@@ -60,4 +68,6 @@ class User {
   get getPosition => _position;
   get getAddressCi => _addressCi;
   get getAddressGoon => _addressGoon;
+  get getIsJoinedTeam => _isJoinedTeam;
+  get getIsMaster => _isMaster;
 }

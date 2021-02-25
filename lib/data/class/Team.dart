@@ -19,4 +19,7 @@ class Team {
 
   /// 개발
   List<Member> development = new List<Member>();
+
+  /// 생성일
+  DateTime anniversary;
 }

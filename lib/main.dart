@@ -140,11 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
       SearchPage(),
       MyProfilePage(user: _user),
       LogInPage(), // 임시
-      //LoginLayoutPage(), // 임시
-      //EditProfilePage(user: _user), // 임시
+      // EditProfilePage(user: _user), // 임시
       // HomePage(),
       CommunityPage(),
-      TeamConfigPage(), // 임시
+      LoginLayoutPage(), // 임시
       // MagazinePage(),
     ];
 
