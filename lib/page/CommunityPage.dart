@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-/// 당겨서 데이터 더 가져오기 기능 구현해야함.
+import 'package:networking/data/class/Post.dart';
+import 'package:networking/widget/NetworkingAppBar.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({
@@ -218,46 +218,6 @@ class _CommunityPageState extends State<CommunityPage> {
     );
   }
 
-  /// 앱바 빌드 메서드
-  Widget _buildTitle(double _deviceHeight, double _deviceWidth) {
-    return Row(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.fromLTRB(_deviceWidth * 0.105, 0, 0, 0),
-          height: _deviceHeight * 0.041,
-          width: _deviceWidth * 0.101,
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Image.asset('images/community_btn_menu.png'),
-            onPressed: () {},
-          ),
-        ),
-        Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            child: Text(
-              '커뮤니티',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(
-              _deviceWidth * 0.02, 0, _deviceWidth * 0.111, 0),
-          height: _deviceHeight * 0.041,
-          width: _deviceWidth * 0.075,
-          child: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: Image.asset('images/community_btn_alarm.png'),
-            onPressed: () {},
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -271,50 +231,14 @@ class _CommunityPageState extends State<CommunityPage> {
     final _deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        elevation: 0.0,
-        leading: null,
-        automaticallyImplyLeading: false,
-        toolbarHeight: _deviceHeight * 0.073,
-        centerTitle: true,
-        titleSpacing: 0,
-        title: _buildTitle(_deviceHeight, _deviceWidth),
+      appBar: NetworkingAppBar(
+        deviceHeight: _deviceHeight,
+        deviceWidth: _deviceWidth,
+        title: '커뮤니티',
       ),
       body: (_isLoadingInit)
           ? _buildLoading(_deviceHeight, _deviceWidth)
           : _buildPage(_deviceHeight, _deviceWidth),
     );
   }
-}
-
-/// 게시글에 대한 클래스
-class Post {
-  /// 프로필 사진
-  Image profilePhoto;
-
-  /// 사용자 닉네임
-  String nickName;
-
-  /// 댓글 수
-  int commentNum;
-
-  /// 좋아요 수
-  int likeNum;
-
-  /// 게시글 내용
-  String content;
-
-  /// 게시글 작성일
-  DateTime postDate;
-
-  Post({
-    @required this.profilePhoto,
-    @required this.nickName,
-    @required this.commentNum,
-    @required this.likeNum,
-    @required this.content,
-    @required this.postDate,
-  });
 }

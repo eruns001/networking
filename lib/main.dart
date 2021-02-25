@@ -2,19 +2,21 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/page/UploadQuestionPage.dart';
-import 'package:networking/page/LogInPage.dart';
 
+import 'data/class/User.dart';
 import 'page/CommunityPage.dart';
+import 'page/EditProfilePage.dart';
+import 'page/LogInPage.dart';
 import 'page/LoginLayoutPage.dart';
+import 'page/MyProfilePage.dart';
+import 'page/SearchPage.dart';
+import 'page/TeamConfigPage.dart';
 
 //전역변수
-//searchTextEditingController
-TextEditingController searchTextEditingController = TextEditingController();
 int aa = 0;
 
 void main() {
-  if(aa == 0){
+  if (aa == 0) {
     log("build test");
     aa++;
   }
@@ -22,25 +24,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+        brightness: Brightness.light,
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -57,210 +47,120 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String dropdownValue = 'One';
+  /// 네비게이션에 표시될 아이콘의 높이
+  static const double ICON_HEIGHT = 30;
 
+  /// 현재 표시 중인 페이지의 인덱스
   int _currentIndex = 0;
 
-  void _incrementCounter() {
+  User _user = new User();
+
+  /// 네비게이션에 표시될 항목들
+  List<BottomNavigationBarItem> _navigationList = <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+      icon: Container(
+        height: ICON_HEIGHT,
+        child: Image.asset(
+          'images/navigation_icon_searchUser.png',
+          height: ICON_HEIGHT,
+        ),
+      ),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Container(
+        height: ICON_HEIGHT,
+        child: Image.asset(
+          'images/navigation_icon_myPage.png',
+          height: ICON_HEIGHT,
+        ),
+      ),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Container(
+        height: ICON_HEIGHT,
+        child: Image.asset(
+          'images/navigation_icon_home.png',
+          height: ICON_HEIGHT,
+        ),
+      ),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Container(
+        height: ICON_HEIGHT,
+        child: Image.asset(
+          'images/navigation_icon_community.png',
+          height: ICON_HEIGHT,
+        ),
+      ),
+      label: '',
+    ),
+    BottomNavigationBarItem(
+      icon: Container(
+        height: ICON_HEIGHT,
+        child: Image.asset(
+          'images/navigation_icon_magazine.png',
+          height: ICON_HEIGHT,
+        ),
+      ),
+      label: '',
+    ),
+  ];
+
+  /// 내비게이션을 터치했을 때 실행될 메서드
+  _onTaped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _currentIndex = index;
     });
+  }
+
+  /// EditProfilePage 테스트용으로 만든 메서드
+  _createUser() {
+    _user.setProfileImage = Image.asset('images/appbar_btn_alarm.png');
+    _user.setNickName = '바보';
+    _user.setRate = 3.5;
+    _user.setName = '장주환';
+    _user.setPhoneNum = '010-1234-5678';
+    _user.setEmail = 'example@gmail.com';
+    _user.setMajor = 'null';
+    _user.setCareer = '5';
+    _user.setPosition = '청소부';
+    _user.setAddressCi = '부산';
+    _user.setAddressGoon = '금정구';
   }
 
   @override
   Widget build(BuildContext context) {
-    //화면 크기 체크
-    //디바이스 너비
-    double _device_width = MediaQuery.of(context).size.width;
-    //디바이스 높이
-    double _device_height = MediaQuery.of(context).size.height;
+    _createUser();
+
+    /// 페이지들
+    List<Widget> _pageList = <Widget>[
+      SearchPage(),
+      MyProfilePage(user: _user),
+      LogInPage(), // 임시
+      // EditProfilePage(user: _user), // 임시
+      // HomePage(),
+      CommunityPage(),
+      LoginLayoutPage(), // 임시
+      // MagazinePage(),
+    ];
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: AppBar(
-            brightness: Brightness.light,
-            centerTitle: true,
-            titleSpacing: -5,
-            backgroundColor: Colors.white.withOpacity(0.0),
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            title: SizedBox(
-              height: 500,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                      padding: EdgeInsets.only(left: 30, right: 25),
-                      icon: Icon(
-                        CupertinoIcons.bars,
-                        color: const Color(0xff46abdb),
-                        size: 50,
-                      ),
-                      onPressed: null),
-                  new Flexible(
-                    child: TextFormField(
-                      controller: searchTextEditingController,
-                      decoration: InputDecoration(
-                        hintText: '$_counter', //'검색어를 입력해 주세요.',
-                        hintStyle: TextStyle(
-                          color: const Color(0xffa2d5ed),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: const Color(0xff46abdb))),
-                        suffixIcon: Icon(
-                          CupertinoIcons.search,
-                          color: const Color(0xff46abdb),
-                          size: 30,
-                        ),
-                      ),
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: const Color(0xffa2d5ed),
-                      ),
-                      onFieldSubmitted: null,
-                    ),
-                  ),
-                  IconButton(
-                      padding: EdgeInsets.only(left: 20, right: 25),
-                      icon: Icon(
-                        CupertinoIcons.doc,
-                        color: const Color(0xff46abdb),
-                        size: 40,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UploadQuestionPage()),
-                        );
-                      }),
-                ],
-              ),
-            )),
-      ),
       body: IndexedStack(
         index: _currentIndex,
-        children: <Widget>[
-          Container(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                      DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                      DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownValue = newValue;
-                          });
-                        },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                      DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: Icon(Icons.arrow_downward),
-                        iconSize: 24,
-                        elevation: 16,
-                        style: TextStyle(color: Colors.deepPurple),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(
-                            () {
-                              dropdownValue = newValue;
-                            },
-                          );
-                        },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      )
-                    ],
-                  ),
-                  for (var a = 0; a < _counter; a++)
-                    temp(_device_width, _device_height),
-                ],
-              ),
-            ),
-          ),
-          UploadQuestionPage()
-        ],
+        children: _pageList,
       ),
+      bottomNavigationBar: Container(
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          items: _navigationList,
+          onTap: _onTaped,
+        ),
+      ),
+      /*
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(bottom: 10),
         child: Row(
@@ -271,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
               iconSize: 50,
               color: const Color(0xff46abdb),
               icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: (){
+              onPressed: () {
                 _currentIndex = 0;
                 setState(() {});
               },
@@ -279,19 +179,19 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_insert_user.png'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => LogInPage()),
-                  );
-                },
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LogInPage()),
+                );
+              },
             ),
             IconButton(
               iconSize: 50,
               icon: new Image.asset('images/search_btn_search.png'),
               onPressed: () {
-              /// 계정찾기 페이지 테스트용으로 추가
+                /// 계정찾기 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -306,6 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
               iconSize: 50,
               icon: new Image.asset('images/search_btn_mypage.png'),
               onPressed: () {
+                /*
                 /// 커뮤니티 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
@@ -315,57 +216,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                   ),
                 );
+                 */
+
+                /// 팀 설정 페이지 테스트용으로 추가
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return TeamConfigPage();
+                    },
+                  ),
+                );
               },
             ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
       ),
+       */
     );
   }
-}
-
-Widget temp(_device_width, _device_height) {
-  return Container(
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: const EdgeInsets.all(10.0),
-          width: _device_width * (38.4 / 100),
-          height: _device_height * (18.4 / 100),
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff46abdb), width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                    color: const Color(0x80cacaca),
-                    offset: Offset(0, -1),
-                    blurRadius: 16,
-                    spreadRadius: 2)
-              ],
-              color: Colors.white),
-        ),
-        Container(
-          margin: const EdgeInsets.all(10.0),
-          width: _device_width * (38.4 / 100),
-          height: _device_height * (18.4 / 100),
-          decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff46abdb), width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                    color: const Color(0x80cacaca),
-                    offset: Offset(0, -1),
-                    blurRadius: 16,
-                    spreadRadius: 2)
-              ],
-              color: Colors.white),
-        ),
-        //Image.asset('images/search_btn_home.png'),
-      ],
-    ),
-  );
 }

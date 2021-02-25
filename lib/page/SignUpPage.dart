@@ -26,6 +26,9 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  // TextEditingController _emailController = new TextEditingController();
+  // TextEditingController _pwController = new TextEditingController();
+  // TextEditingController _pwConfirmController = new TextEditingController();
 
   var _signupimage;
   Widget _signupImageWidget = UQP_icon_1st;
@@ -265,7 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: CupertinoButton(
               padding: EdgeInsets.zero,
               child: Image.asset('images/signUp_btn_next.png'),
-              onPressed: () async{
+              onPressed: () async {
                 IsLogIn = true;
                 //firebase에 입력
                 String document = "Account_$uid";
@@ -293,6 +296,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         leading: null,
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.075,

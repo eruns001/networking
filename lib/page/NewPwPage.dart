@@ -117,6 +117,7 @@ class _NewPwPageState extends State<NewPwPage> {
 
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         leading: null,
         automaticallyImplyLeading: false,
         toolbarHeight: _deviceHeight * 0.075,

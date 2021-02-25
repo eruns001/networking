@@ -2,6 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.993827766623-6b25kd2qu95j6qgjclpmbn9t13ttrf0g</string>
+            </array>
+        </dict>
+    </array>
+    <!-- End of the Google Sign-in Section -->
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Need to upload image</string>
     <key>NSCameraUsageDescription</key>
