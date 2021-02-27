@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:networking/data/class/User.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
 
@@ -21,6 +24,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _phoneNumController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
+
+  /// 갤러리에서 이미지를 가져오는 메서드
+  Future _getImage() async {
+    PickedFile image =
+        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(
+        () {
+          widget._user.setProfileImage = Image.file(File(image.path));
+        },
+      );
+    }
+  }
 
   /// 페이지 내용을 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
@@ -70,6 +87,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       widget._user.setPhoneNum = _phoneNumController.text;
                       widget._user.setEmail = _emailController.text;
 
+                      /// 변경된 내용을 서버로 업로드하는 과정 필요
+
                       Navigator.pop(context, true);
                     },
                   ),
@@ -88,7 +107,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 decoration: BoxDecoration(
                   border: Border.all(),
                 ),
-                child: widget._user.getProfileImage,
+                child: FlatButton(
+                  padding: EdgeInsets.zero,
+                  child: widget._user.getProfileImage,
+                  onPressed: () async {
+                    await _getImage();
+                  },
+                ),
               ),
 
               /// 닉네임, 별점, 비밀번호 변경 버튼
