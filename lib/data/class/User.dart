@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Team.dart';
+
 class User {
   /// 프로필 사진
   Image _image;
@@ -28,15 +30,17 @@ class User {
   /// 역할
   String _position;
 
-  /// 주소 시, 군
-  String _addressCi;
-  String _addressGoon;
+  /// 주소 시
+  String _address;
 
   /// 팀에 속해 있는지
   bool _isJoinedTeam = false;
 
   /// 팀을 만든 사람인지
   bool _isMaster = false;
+
+  /// 팀에 대한 정보
+  Team _team;
 
   /// 포트폴리오 추가 필요
   /// 한줄 평 추가 필요 Post 를 확장해서 사용하면 될 듯.
@@ -51,10 +55,10 @@ class User {
   set setMajor(String major) => {_major = major};
   set setCareer(String career) => {_career = career};
   set setPosition(String position) => {_position = position};
-  set setAddressCi(String addressCi) => {_addressCi = addressCi};
-  set setAddressGoon(String addressGoon) => {_addressGoon = addressGoon};
+  set setAddress(String address) => {_address = address};
   set setIsJoinedTeam(bool isJoinedTeam) => {_isJoinedTeam = isJoinedTeam};
   set setIsMaster(bool isMaster) => {_isMaster = isMaster};
+  set setTeam(Team team) => {_team = team};
 
   /// getter
   get getProfileImage => _image;
@@ -66,8 +70,8 @@ class User {
   get getMajor => _major;
   get getCareer => _career;
   get getPosition => _position;
-  get getAddressCi => _addressCi;
-  get getAddressGoon => _addressGoon;
+  get getAddress => _address;
   get getIsJoinedTeam => _isJoinedTeam;
   get getIsMaster => _isMaster;
+  get getTeam => _team;
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:networking/data/class/Team.dart';
 import 'package:networking/data/class/User.dart';
+import 'package:networking/page/MyTeamMemberVer.dart';
 import 'package:networking/page/TeamConfigPage.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
 
 import 'EditProfilePage.dart';
+import 'MyTeamAdminVer.dart';
 
+/// 네비게이션에서 MY 누를 경우 나오는 화면
 class MyProfilePage extends StatefulWidget {
   MyProfilePage({
     Key key,
@@ -21,13 +26,10 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
-    ScrollController _controller = new ScrollController();
-
     return Container(
       child: Scrollbar(
-        controller: _controller,
         child: ListView(
-          controller: _controller,
+          controller: PrimaryScrollController.of(context),
           padding: EdgeInsets.all(_deviceWidth * 0.052),
           children: <Widget>[
             /// 프로필 사진 및 닉네임, 별점, 프로필 수정 버튼
@@ -134,12 +136,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             MyProfileInfo(title: '연락처', content: widget._user.getPhoneNum),
 
             /// 주소
-            MyProfileInfo(
-              title: '주소',
-              content: widget._user.getAddressCi +
-                  '시 ' +
-                  widget._user.getAddressGoon,
-            ),
+            MyProfileInfo(title: '주소', content: widget._user.getAddress),
 
             /// 이메일
             MyProfileInfo(title: '이메일', content: widget._user.getEmail),
@@ -167,6 +164,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
                   /// 열기 버튼
                   Container(
                     margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.02, 0, 0),
@@ -201,14 +199,42 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 child: FlatButton(
                   padding: EdgeInsets.zero,
                   child: Text('팀 프로필'),
-                  onPressed: () {
+                  onPressed: () async {
+                    /// 서버에서 속한 팀이 있는지 다시 데이터를 불러오는 작업 필요.
+
                     if (widget._user.getIsJoinedTeam) {
                       /// 속한 팀이 있을 경우
 
                       if (widget._user.getIsMaster) {
                         /// 그 팀의 개설자일 경우
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return MyTeamAdminVer(team: widget._user.getTeam);
+                            },
+                          ),
+                        );
                       } else {
                         /// 그 팀의 개설자가 아닐 경우
+                        bool getOut = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) {
+                              return MyTeamMemberVer(
+                                  team: widget._user.getTeam);
+                            },
+                          ),
+                        );
+
+                        /// 유저가 팀에서 나가기를 선택했을 경우 실행
+                        if (getOut) {
+                          widget._user.setIsJoinedTeam = false;
+                          widget._user.setIsMaster = false;
+                          widget._user.setTeam = new Team();
+
+                          /// 이 정보를 서버에 전송하는 과정 필요.
+                        }
                       }
                     } else {
                       /// 속한 팀이 없을 경우
@@ -223,12 +249,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
                             actions: <Widget>[
                               FlatButton(
                                 child: Text('예'),
-                                onPressed: () {
+                                onPressed: () async {
                                   /// Dialog 지우기
                                   Navigator.of(context).pop();
 
                                   /// 팀 생성 페이지로 연결
-                                  Navigator.push(
+                                  Team _team = await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) {
@@ -236,6 +262,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       },
                                     ),
                                   );
+
+                                  if (_team != null) {
+                                    widget._user.setTeam = _team;
+                                    widget._user.setIsJoinedTeam = true;
+                                    widget._user.setIsMaster = true;
+
+                                    setState(() {});
+                                  }
                                 },
                               ),
                               FlatButton(
@@ -271,6 +305,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
         deviceWidth: _deviceWidth,
+        context: context,
         title: '내 프로필',
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),

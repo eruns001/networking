@@ -2,23 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:networking/widget/NetworkingAppBar.dart';
-import 'package:rxdart/rxdart.dart';
-
 import 'package:networking/data/class/Member.dart';
 import 'package:networking/data/class/Team.dart';
+import 'package:networking/widget/NetworkingAppBar.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
+import 'package:rxdart/rxdart.dart';
 
+/// 팀 설정 페이지
+/// 속한 팀이 없을 경우 이 페이지에서 팀을 만들 수 있다.
 class TeamConfigPage extends StatefulWidget {
-  const TeamConfigPage({Key key}) : super(key: key);
+  const TeamConfigPage({
+    Key key,
+    Team team,
+  })  : _team = team,
+        super(key: key);
+
+  final Team _team;
 
   @override
   _TeamConfigPageState createState() => _TeamConfigPageState();
 }
 
 class _TeamConfigPageState extends State<TeamConfigPage> {
-  String _teamName;
-  String _subject;
-
   BehaviorSubject<List<Member>> _planningController = new BehaviorSubject();
   BehaviorSubject<List<Member>> _designController = new BehaviorSubject();
   BehaviorSubject<List<Member>> _marketingController = new BehaviorSubject();
@@ -42,48 +47,49 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
           child: ListView(
             controller: _listViewScrollController,
             children: <Widget>[
+              /// 팀 이름
               Container(
-                /// 팀 이름
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.021, 0, 0),
                 alignment: Alignment.center,
                 child: Text('팀 이름'),
               ),
+
+              /// 팀 이름 입력 공간
               TeamConfigTextField(
-                /// 팀 이름 입력 공간
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 controller: _teamNameController,
-                onSubmitted: (String string) {
-                  _teamName = string;
-                },
               ),
+
+              /// 프로젝트 주제
               Container(
-                /// 프로젝트 주제
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.011, 0, 0),
                 alignment: Alignment.center,
                 child: Text('프로젝트 주제'),
               ),
+
+              /// 프로젝트 주제 입력 공간
               TeamConfigTextField(
-                /// 프로젝트 주제 입력 공간
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 controller: _subjectController,
-                onSubmitted: (String string) {
-                  _subject = string;
-                },
               ),
+
+              /// 분할선
               Container(
-                /// 분할선
                 margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.01, 0, 0),
                 child: Divider(),
               ),
+
+              /// 기획
               TeamConfigTemplate(
-                /// 기획
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 title: '기획',
                 controller: _planningController,
               ),
+
+              /// 분할선
               Container(
                 margin: EdgeInsets.fromLTRB(
                   _deviceWidth * 0.055,
@@ -93,13 +99,16 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                 ),
                 child: Divider(),
               ),
+
+              /// 디자인
               TeamConfigTemplate(
-                /// 디자인
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 title: '디자인',
                 controller: _designController,
               ),
+
+              /// 분할선
               Container(
                 margin: EdgeInsets.fromLTRB(
                   _deviceWidth * 0.055,
@@ -109,13 +118,16 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                 ),
                 child: Divider(),
               ),
+
+              /// 마케팅
               TeamConfigTemplate(
-                /// 마케팅
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 title: '마케팅',
                 controller: _marketingController,
               ),
+
+              /// 분할선
               Container(
                 margin: EdgeInsets.fromLTRB(
                   _deviceWidth * 0.055,
@@ -125,13 +137,16 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                 ),
                 child: Divider(),
               ),
+
+              /// 개발
               TeamConfigTemplate(
-                /// 개발
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 title: '개발',
                 controller: _developmentController,
               ),
+
+              /// 저장버튼
               Container(
                 margin: EdgeInsets.fromLTRB(
                   _deviceWidth * 0.3925,
@@ -147,8 +162,8 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                   onPressed: () {
                     Team _team = new Team();
 
-                    _team.teamName = _teamName;
-                    _team.subject = _subject;
+                    _team.teamName = _teamNameController.text;
+                    _team.subject = _subjectController.text;
                     if (_planningController.value != null)
                       _team.planning = _planningController.value;
                     if (_designController.value != null)
@@ -157,7 +172,12 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                       _team.marketing = _marketingController.value;
                     if (_developmentController.value != null)
                       _team.development = _developmentController.value;
-                    _team.anniversary = DateTime.now();
+                    if(widget._team == null) {
+                      _team.anniversary = DateTime.now();
+                    }
+                    else {
+                      _team.anniversary = widget._team.anniversary;
+                    }
 
                     print(_team.teamName);
                     print(_team.subject);
@@ -167,6 +187,12 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                     print(
                         'development : ' + _team.development.length.toString());
                     print('anniversary : ' + _team.anniversary.toString());
+
+                    Navigator.of(context).pop(_team);
+
+                    /// 서버에 데이터를 업로드하는 작업 필요.
+                    /// 팀을 수정하는 경우와 새로 만드는 경우를 분리해서 해야할듯
+                    /// 구분은 [widget._team] 이 null 인지 아닌지로 하면 된다.
                   },
                 ),
               ),
@@ -175,6 +201,20 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
         ),
       ),
     );
+  }
+
+  @override
+  initState() {
+    super.initState();
+
+    if(widget._team != null) {
+      _teamNameController.text = widget._team.teamName;
+      _subjectController.text = widget._team.subject;
+      _planningController.sink.add(widget._team.planning);
+      _designController.sink.add(widget._team.design);
+      _marketingController.sink.add(widget._team.marketing);
+      _developmentController.sink.add(widget._team.development);
+    }
   }
 
   @override
@@ -196,6 +236,7 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
         deviceWidth: _deviceWidth,
+        context: context,
         title: 'My TEAM',
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
@@ -210,7 +251,7 @@ class TeamConfigTextField extends StatelessWidget {
     @required TextEditingController controller,
     @required double deviceHeight,
     @required double deviceWidth,
-    @required Function onSubmitted,
+    Function onSubmitted,
   })  : _controller = controller,
         _deviceHeight = deviceHeight,
         _deviceWidth = deviceWidth,
@@ -621,200 +662,208 @@ class TeamConfigTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: _controller.stream,
-        initialData: new List<Member>(),
-        builder: (BuildContext context, AsyncSnapshot<List<Member>> snapshot) {
-          return Container(
-            margin: EdgeInsets.fromLTRB(
-              _deviceWidth * 0.055,
-              0,
-              _deviceWidth * 0.055,
-              0,
-            ),
-            height: _deviceHeight * 0.060 +
-                (snapshot.data.length + 1) * _deviceHeight * 0.18,
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: snapshot.data.length + 2,
-              itemBuilder: (BuildContext context, int index) {
-                if (index == 0) {
-                  return Container(
-                    margin: EdgeInsets.fromLTRB(
-                      0,
-                      _deviceHeight * 0.012,
-                      0,
-                      _deviceHeight * 0.007,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          /// 중간 맞추기용
-                          height: _deviceHeight * 0.019,
-                          width: _deviceWidth * 0.217,
+      stream: _controller.stream,
+      initialData: new List<Member>(),
+      builder: (BuildContext context, AsyncSnapshot<List<Member>> snapshot) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(
+            _deviceWidth * 0.055,
+            0,
+            _deviceWidth * 0.055,
+            0,
+          ),
+          height: (_deviceHeight * 0.05) +
+              ((snapshot.data.length + 1) * _deviceHeight * 0.135),
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: snapshot.data.length + 2,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return Container(
+                  margin: EdgeInsets.fromLTRB(
+                    0,
+                    _deviceHeight * 0.012,
+                    0,
+                    _deviceHeight * 0.007,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      /// 중간 맞추기용
+                      Container(
+                        height: _deviceHeight * 0.019,
+                        width: _deviceWidth * 0.217,
+                      ),
+
+                      /// 제목
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            _title,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
                         ),
-                        Expanded(
-                          /// 제목
+                      ),
+
+                      /// 포지션 변경 버튼
+                      Container(
+                        height: _deviceHeight * 0.04,
+                        width: _deviceWidth * 0.217,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: Image.asset(
+                              'images/teamConfig_btn_changePosition.png'),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                /// 멤버의 정보가 표시될 공간
+                return Container(
+                  margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.013, 0, 0),
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(_deviceHeight * 0.011),
+                        child: Column(
+                          children: <Widget>[
+                            /// 이름
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: _deviceWidth * 0.2,
+                                  child: Text('이름'),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: _deviceWidth * 0.05),
+                                  child: (snapshot.data.length + 1 > index)
+                                      ? Text(snapshot.data
+                                          .elementAt(index - 1)
+                                          .name)
+                                      : null,
+                                ),
+                              ],
+                            ),
+
+                            /// 분할선
+                            Divider(),
+
+                            /// 연락처
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: _deviceWidth * 0.2,
+                                  child: Text('연락처'),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: _deviceWidth * 0.05),
+                                  child: (snapshot.data.length + 1 > index)
+                                      ? Text(snapshot.data
+                                          .elementAt(index - 1)
+                                          .phoneNum)
+                                      : null,
+                                ),
+                              ],
+                            ),
+
+                            /// 포지션
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: _deviceWidth * 0.2,
+                                  child: Text('포지션'),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: _deviceWidth * 0.05),
+                                  child: (snapshot.data.length + 1 > index)
+                                      ? Text(snapshot.data
+                                          .elementAt(index - 1)
+                                          .position)
+                                      : null,
+                                ),
+                              ],
+                            ),
+
+                            /// 이메일
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  width: _deviceWidth * 0.2,
+                                  child: Text('이메일'),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: _deviceWidth * 0.05),
+                                  child: (snapshot.data.length + 1 > index)
+                                      ? Text(snapshot.data
+                                          .elementAt(index - 1)
+                                          .email)
+                                      : null,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      /// 멤버 수정 버튼
+                      Visibility(
+                        visible: snapshot.data.length + 1 > index,
+                        child: Positioned(
+                          bottom: _deviceHeight * 0.02,
+                          right: _deviceHeight * 0.02,
                           child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              _title,
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
+                            height: _deviceWidth * 0.05,
+                            width: _deviceWidth * 0.05,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              child: Icon(Icons.edit),
+                              onPressed: () {
+                                _showEditMemberDialog(
+                                    context, snapshot.data, index - 1);
+                              },
                             ),
                           ),
                         ),
-                        Container(
-                          /// 포지션 변경 버튼
-                          height: _deviceHeight * 0.04,
-                          width: _deviceWidth * 0.217,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: Image.asset(
-                                'images/teamConfig_btn_changePosition.png'),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  // 정보가 입력되었는지 판단할 변수
-                  return Container(
-                    /// 멤버의 정보가 표시될 공간
-                    margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.013, 0, 0),
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                    ),
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(_deviceHeight * 0.011),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                /// 이름
-                                children: <Widget>[
-                                  Container(
-                                    width: _deviceWidth * 0.2,
-                                    child: Text('이름'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: _deviceWidth * 0.05),
-                                    child: (snapshot.data.length + 1 > index)
-                                        ? Text(snapshot.data
-                                            .elementAt(index - 1)
-                                            .name)
-                                        : null,
-                                  ),
-                                ],
-                              ),
-                              Divider(),
-                              Row(
-                                /// 연락처
-                                children: <Widget>[
-                                  Container(
-                                    width: _deviceWidth * 0.2,
-                                    child: Text('연락처'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: _deviceWidth * 0.05),
-                                    child: (snapshot.data.length + 1 > index)
-                                        ? Text(snapshot.data
-                                            .elementAt(index - 1)
-                                            .phoneNum)
-                                        : null,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                /// 포지션
-                                children: <Widget>[
-                                  Container(
-                                    width: _deviceWidth * 0.2,
-                                    child: Text('포지션'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: _deviceWidth * 0.05),
-                                    child: (snapshot.data.length + 1 > index)
-                                        ? Text(snapshot.data
-                                            .elementAt(index - 1)
-                                            .position)
-                                        : null,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                /// 이메일
-                                children: <Widget>[
-                                  Container(
-                                    width: _deviceWidth * 0.2,
-                                    child: Text('이메일'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        left: _deviceWidth * 0.05),
-                                    child: (snapshot.data.length + 1 > index)
-                                        ? Text(snapshot.data
-                                            .elementAt(index - 1)
-                                            .email)
-                                        : null,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: snapshot.data.length + 1 > index,
-                          child: Positioned(
-                            /// 멤버 수정 버튼
-                            bottom: _deviceHeight * 0.02,
-                            right: _deviceHeight * 0.02,
-                            child: Container(
-                              height: _deviceWidth * 0.05,
-                              width: _deviceWidth * 0.05,
-                              child: CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: Icon(Icons.edit),
-                                onPressed: () {
-                                  _showEditMemberDialog(
-                                      context, snapshot.data, index - 1);
-                                },
-                              ),
+                      ),
+
+                      /// 멤버 추가 버튼
+                      Visibility(
+                        visible: snapshot.data.length + 1 == index,
+                        child: Positioned(
+                          bottom: _deviceHeight * 0.02,
+                          right: _deviceHeight * 0.02,
+                          child: Container(
+                            height: _deviceWidth * 0.05,
+                            width: _deviceWidth * 0.05,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              child: Icon(Icons.add),
+                              onPressed: () {
+                                _showAddMemberDialog(context, snapshot.data);
+                              },
                             ),
                           ),
                         ),
-                        Visibility(
-                          visible: snapshot.data.length + 1 == index,
-                          child: Positioned(
-                            /// 멤버 추가 버튼
-                            bottom: _deviceHeight * 0.02,
-                            right: _deviceHeight * 0.02,
-                            child: Container(
-                              height: _deviceWidth * 0.05,
-                              width: _deviceWidth * 0.05,
-                              child: CupertinoButton(
-                                padding: EdgeInsets.zero,
-                                child: Icon(Icons.add),
-                                onPressed: () {
-                                  _showAddMemberDialog(context, snapshot.data);
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          );
-        });
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }
-
