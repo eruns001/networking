@@ -45,7 +45,8 @@ Future<bool> googleSingIn () async{
 
     AuthResult result = await auth.signInWithCredential(credential);
 
-    FirebaseUser user = await auth.currentUser();
+    //FirebaseUser user = await auth.currentUser();
+    FirebaseUser user = result.user;
     print("user.uid : ${user.uid}");
     uid = user.uid;
     return Future.value(true);
@@ -87,10 +88,12 @@ Future<bool> signup(String email, String password) async {
 ///로그아웃
 Future<bool> signOutUser() async {
   FirebaseUser user = await auth.currentUser();
+
   if(user.providerData[1].providerId == 'google.com'){
     await gooleSignIn.disconnect();
   }
   await auth.signOut();
+
   return Future.value(false);
 }
 
