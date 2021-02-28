@@ -6,6 +6,8 @@ import 'package:networking/data/data.dart';
 import 'package:networking/data/function.dart';
 import 'package:networking/widget/net_Container.dart';
 
+import '../main.dart';
+
 ///구글 연계 로그인 후 firebase에 집어넣을 개인정보 입력하는 페이지
 ///프로필사진
 ///닉네임
@@ -91,6 +93,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 onSubmitted: (String string) {},
               ),
               */
+
+              ///프로필사진
               net_Container(
                 child: IconButton(
                   icon: _signupImageWidget,
@@ -271,7 +275,7 @@ class _SignUpPageState extends State<SignUpPage> {
               onPressed: () async {
                 IsLogIn = true;
                 //firebase에 입력
-                String document = "Account_$uid";
+                String document = "$uid";
                 print("nickname : ${_nickNameController.text}");
                 await Firestore.instance.collection('Account').document(document).setData({
                   'nickName': _nickNameController.text,
@@ -280,7 +284,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   'address':_addressController,
                   'e_mail':_emailController.text,
                 });
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
               },
             ),
           ),
