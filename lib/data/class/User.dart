@@ -30,7 +30,7 @@ class User {
   /// 역할
   String _position;
 
-  /// 주소 시, 군
+  /// 주소 시
   String _address;
 
   /// 팀에 속해 있는지

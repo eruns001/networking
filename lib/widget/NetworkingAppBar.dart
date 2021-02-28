@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // ignore: non_constant_identifier_names
 AppBar NetworkingAppBar({
+  @required BuildContext context,
   @required double deviceHeight,
   @required double deviceWidth,
   @required String title,
@@ -27,7 +28,9 @@ AppBar NetworkingAppBar({
           child: CupertinoButton(
             padding: EdgeInsets.zero,
             child: Image.asset('images/appbar_btn_menu.png'),
-            onPressed: onPressedBurger,
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
           ),
         ),
         Expanded(

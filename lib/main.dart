@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
 
 import 'data/class/Member.dart';
 import 'data/class/Team.dart';
@@ -119,8 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
   /// 임시로 팀을 생성하는 메서드
   Team _createTeam() {
     Team _team = new Team();
-    _team.teamName = '팀';
-    _team.subject = '팀 주제';
+    _team.teamName = '이것은 이름';
+    _team.subject = '이것은 주제';
     _team.anniversary = DateTime(2021, 02, 26, 19, 00);
     _team.planning = [
       Member(
@@ -128,7 +129,19 @@ class _MyHomePageState extends State<MyHomePage> {
         phoneNum: '01012345678',
         position: '청소부',
         email: 'example@gamil.com',
-      )
+      ),
+      Member(
+        name: '멤버',
+        phoneNum: '01012345678',
+        position: '청소부',
+        email: 'example@gamil.com',
+      ),
+      Member(
+        name: '멤버',
+        phoneNum: '01012345678',
+        position: '청소부',
+        email: 'example@gamil.com',
+      ),
     ];
     _team.design = [
       Member(
@@ -136,7 +149,13 @@ class _MyHomePageState extends State<MyHomePage> {
         phoneNum: '01012345678',
         position: '청소부',
         email: 'example@gamil.com',
-      )
+      ),
+      Member(
+        name: '멤버',
+        phoneNum: '01012345678',
+        position: '청소부',
+        email: 'example@gamil.com',
+      ),
     ];
     _team.marketing = [
       Member(
@@ -144,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
         phoneNum: '01012345678',
         position: '청소부',
         email: 'example@gamil.com',
-      )
+      ),
     ];
     _team.development = [
       Member(
@@ -152,7 +171,19 @@ class _MyHomePageState extends State<MyHomePage> {
         phoneNum: '01012345678',
         position: '청소부',
         email: 'example@gamil.com',
-      )
+      ),
+      Member(
+        name: '멤버',
+        phoneNum: '01012345678',
+        position: '청소부',
+        email: 'example@gamil.com',
+      ),
+      Member(
+        name: '멤버',
+        phoneNum: '01012345678',
+        position: '청소부',
+        email: 'example@gamil.com',
+      ),
     ];
 
     return _team;
@@ -199,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
         index: _currentIndex,
         children: _pageList,
       ),
+      drawer: NetworkingDrawer(context: context),
       bottomNavigationBar: Container(
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -207,79 +239,6 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: _onTaped,
         ),
       ),
-      /*
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            //btn_home
-            IconButton(
-              iconSize: 50,
-              color: const Color(0xff46abdb),
-              icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: () {
-                _currentIndex = 0;
-                setState(() {});
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_insert_user.png'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LogInPage()),
-                );
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_search.png'),
-              onPressed: () {
-                /// 계정찾기 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return LoginLayoutPage();
-                    },
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_mypage.png'),
-              onPressed: () {
-                /*
-                /// 커뮤니티 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return CommunityPage();
-                    },
-                  ),
-                );
-                 */
-
-                /// 팀 설정 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return TeamConfigPage();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-       */
     );
   }
 }

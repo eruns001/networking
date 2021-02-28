@@ -5,21 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:networking/data/class/Member.dart';
 import 'package:networking/data/class/Team.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// 팀 설정 페이지
 /// 속한 팀이 없을 경우 이 페이지에서 팀을 만들 수 있다.
 class TeamConfigPage extends StatefulWidget {
-  const TeamConfigPage({Key key}) : super(key: key);
+  const TeamConfigPage({
+    Key key,
+    Team team,
+  })  : _team = team,
+        super(key: key);
+
+  final Team _team;
 
   @override
   _TeamConfigPageState createState() => _TeamConfigPageState();
 }
 
 class _TeamConfigPageState extends State<TeamConfigPage> {
-  String _teamName;
-  String _subject;
-
   BehaviorSubject<List<Member>> _planningController = new BehaviorSubject();
   BehaviorSubject<List<Member>> _designController = new BehaviorSubject();
   BehaviorSubject<List<Member>> _marketingController = new BehaviorSubject();
@@ -55,9 +59,6 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 controller: _teamNameController,
-                onSubmitted: (String string) {
-                  _teamName = string;
-                },
               ),
 
               /// 프로젝트 주제
@@ -72,9 +73,6 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
                 controller: _subjectController,
-                onSubmitted: (String string) {
-                  _subject = string;
-                },
               ),
 
               /// 분할선
@@ -164,8 +162,8 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                   onPressed: () {
                     Team _team = new Team();
 
-                    _team.teamName = _teamName;
-                    _team.subject = _subject;
+                    _team.teamName = _teamNameController.text;
+                    _team.subject = _subjectController.text;
                     if (_planningController.value != null)
                       _team.planning = _planningController.value;
                     if (_designController.value != null)
@@ -174,7 +172,12 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                       _team.marketing = _marketingController.value;
                     if (_developmentController.value != null)
                       _team.development = _developmentController.value;
-                    _team.anniversary = DateTime.now();
+                    if(widget._team == null) {
+                      _team.anniversary = DateTime.now();
+                    }
+                    else {
+                      _team.anniversary = widget._team.anniversary;
+                    }
 
                     print(_team.teamName);
                     print(_team.subject);
@@ -184,6 +187,12 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
                     print(
                         'development : ' + _team.development.length.toString());
                     print('anniversary : ' + _team.anniversary.toString());
+
+                    Navigator.of(context).pop(_team);
+
+                    /// 서버에 데이터를 업로드하는 작업 필요.
+                    /// 팀을 수정하는 경우와 새로 만드는 경우를 분리해서 해야할듯
+                    /// 구분은 [widget._team] 이 null 인지 아닌지로 하면 된다.
                   },
                 ),
               ),
@@ -192,6 +201,20 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
         ),
       ),
     );
+  }
+
+  @override
+  initState() {
+    super.initState();
+
+    if(widget._team != null) {
+      _teamNameController.text = widget._team.teamName;
+      _subjectController.text = widget._team.subject;
+      _planningController.sink.add(widget._team.planning);
+      _designController.sink.add(widget._team.design);
+      _marketingController.sink.add(widget._team.marketing);
+      _developmentController.sink.add(widget._team.development);
+    }
   }
 
   @override
@@ -213,6 +236,7 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
         deviceWidth: _deviceWidth,
+        context: context,
         title: 'My TEAM',
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
@@ -227,7 +251,7 @@ class TeamConfigTextField extends StatelessWidget {
     @required TextEditingController controller,
     @required double deviceHeight,
     @required double deviceWidth,
-    @required Function onSubmitted,
+    Function onSubmitted,
   })  : _controller = controller,
         _deviceHeight = deviceHeight,
         _deviceWidth = deviceWidth,
@@ -648,8 +672,8 @@ class TeamConfigTemplate extends StatelessWidget {
             _deviceWidth * 0.055,
             0,
           ),
-          height: _deviceHeight * 0.060 +
-              (snapshot.data.length + 1) * _deviceHeight * 0.18,
+          height: (_deviceHeight * 0.05) +
+              ((snapshot.data.length + 1) * _deviceHeight * 0.135),
           child: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             itemCount: snapshot.data.length + 2,

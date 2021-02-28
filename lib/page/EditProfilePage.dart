@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:networking/data/class/User.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
 
 class EditProfilePage extends StatefulWidget {
   EditProfilePage({
@@ -276,6 +277,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
         deviceWidth: _deviceWidth,
+        context: context,
         title: '내 프로필 수정',
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),

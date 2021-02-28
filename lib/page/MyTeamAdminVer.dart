@@ -1,25 +1,28 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/data/class/Member.dart';
 import 'package:networking/data/class/Team.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
 import 'package:networking/widget/NetworkingDrawer.dart';
 
-/// 팀 프로필에서 본인이 팀에 속해있지만, 팀의 개설자가 아닌 경우 출력할 페이지
-/// 팀페이지 팀원 ver.
-class MyTeamMemberVer extends StatefulWidget {
-  MyTeamMemberVer({
+import 'TeamConfigPage.dart';
+
+/// 팀 프로필에서 본인이 팀에 속해있고, 그 팀의 관리자일 경우 출력되는 페이지
+/// 팀페이지 관리자 Ver.
+class MyTeamAdminVer extends StatefulWidget {
+  MyTeamAdminVer({
     Key key,
-    @required Team team,
+    Team team,
   })  : _team = team,
         super(key: key);
 
   final Team _team;
 
   @override
-  _MyTeamMemberVerState createState() => _MyTeamMemberVerState();
+  _MyTeamAdminVerState createState() => _MyTeamAdminVerState();
 }
 
-class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
+class _MyTeamAdminVerState extends State<MyTeamAdminVer> {
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
     return Container(
@@ -48,13 +51,52 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
               child: Text('${widget._team.subject}'),
             ),
 
-            /// 생성일자
-            Container(
-              margin: EdgeInsets.fromLTRB(
-                  _deviceWidth * 0.055, _deviceHeight * 0.03, 0, 0),
-              child: Text(
-                '생성일자  ${widget._team.anniversary.year}/${widget._team.anniversary.month}/${widget._team.anniversary.day}',
-              ),
+            /// 생성일자 및 수정버튼
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                /// 생성일자
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      _deviceWidth * 0.055, _deviceHeight * 0.03, 0, 0),
+                  child: Text(
+                    '생성일자  ${widget._team.anniversary.year}/${widget._team.anniversary.month}/${widget._team.anniversary.day}',
+                  ),
+                ),
+
+                /// 수정버튼
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, _deviceWidth * 0.055, 0),
+                  height: _deviceWidth * 0.088,
+                  width: _deviceWidth * 0.088,
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    child: Image.asset('images/myTeamAdminVer_btn_change.png'),
+                    onPressed: () async {
+                      Team _newTeam = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return TeamConfigPage(team: widget._team);
+                          },
+                        ),
+                      );
+
+                      if(_newTeam != null) {
+                        widget._team.teamName = _newTeam.teamName;
+                        widget._team.subject = _newTeam.subject;
+                        widget._team.anniversary = _newTeam.anniversary;
+                        widget._team.planning = _newTeam.planning;
+                        widget._team.design = _newTeam.design;
+                        widget._team.marketing = _newTeam.marketing;
+                        widget._team.development = _newTeam.development;
+
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
 
             /// 분할선
@@ -64,7 +106,7 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
             ),
 
             /// 기획
-            MyTeamMemberVerTemplate(
+            MyTeamAdminVerTemplate(
               deviceHeight: _deviceHeight,
               deviceWidth: _deviceWidth,
               title: '기획',
@@ -83,7 +125,7 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
             ),
 
             /// 디자인
-            MyTeamMemberVerTemplate(
+            MyTeamAdminVerTemplate(
               deviceHeight: _deviceHeight,
               deviceWidth: _deviceWidth,
               title: '디자인',
@@ -102,7 +144,7 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
             ),
 
             /// 마케팅
-            MyTeamMemberVerTemplate(
+            MyTeamAdminVerTemplate(
               deviceHeight: _deviceHeight,
               deviceWidth: _deviceWidth,
               title: '마케팅',
@@ -121,14 +163,14 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
             ),
 
             /// 개발
-            MyTeamMemberVerTemplate(
+            MyTeamAdminVerTemplate(
               deviceHeight: _deviceHeight,
               deviceWidth: _deviceWidth,
               title: '개발',
               memberList: widget._team.development,
             ),
 
-            /// 팀 나가기 버튼
+            /// 프로젝트 완료 버튼
             Container(
               margin: EdgeInsets.fromLTRB(
                 _deviceWidth * 0.3925,
@@ -141,44 +183,9 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
               child: FlatButton(
                 padding: EdgeInsets.zero,
                 child: Text(
-                  '팀 나가기',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
+                  '프로젝트 완료',
                 ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('경고'),
-                        content: Text('정말로 이 팀에서 나가시겠습니까?'),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              '예',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).pop(true);
-
-                              /// 이 팀원을 팀에서 빼는 작업 추가 필요
-                            },
-                          ),
-                          FlatButton(
-                            child: Text('아니오'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                onPressed: () {},
               ),
             ),
           ],
@@ -191,6 +198,7 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
   Widget build(BuildContext context) {
     final double _deviceHeight = MediaQuery.of(context).size.height;
     final double _deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
@@ -203,8 +211,8 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
   }
 }
 
-class MyTeamMemberVerTemplate extends StatelessWidget {
-  MyTeamMemberVerTemplate({
+class MyTeamAdminVerTemplate extends StatelessWidget {
+  MyTeamAdminVerTemplate({
     Key key,
     double deviceHeight,
     double deviceWidth,

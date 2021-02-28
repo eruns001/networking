@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/data/class/Post.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
+import 'package:networking/widget/NetworkingDrawer.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({
@@ -232,6 +233,7 @@ class _CommunityPageState extends State<CommunityPage> {
       appBar: NetworkingAppBar(
         deviceHeight: _deviceHeight,
         deviceWidth: _deviceWidth,
+        context: context,
         title: '커뮤니티',
       ),
       body: (_isLoadingInit)
