@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/data/data.dart';
 
 // ignore: non_constant_identifier_names
 Drawer NetworkingDrawer({
@@ -15,6 +17,7 @@ Drawer NetworkingDrawer({
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          /// 로고 및 메뉴 아이콘
           AppBar(
             leading: null,
             automaticallyImplyLeading: false,
@@ -25,10 +28,13 @@ Drawer NetworkingDrawer({
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                /// 로고
                 Container(
                   width: _deviceWidth * 0.3,
                   child: Image.asset('images/loginLayout_logo.png'),
                 ),
+
+                /// 메뉴 아이콘
                 Container(
                   height: _deviceHeight * 0.041,
                   child: CupertinoButton(
@@ -40,6 +46,40 @@ Drawer NetworkingDrawer({
                   ),
                 ),
               ],
+            ),
+          ),
+
+          /// 테스트용으로 넣은 로그아웃
+          Container(
+            height: 50,
+            child: CupertinoButton(
+              child: Text(
+                '로그아웃',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    gooleSignIn.signOut().whenComplete(
+                      () {
+                        FirebaseAuth.instance.signOut().whenComplete(
+                          () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    );
+
+                    return AlertDialog(
+                      content: CupertinoActivityIndicator(),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],

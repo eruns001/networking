@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const double ICON_HEIGHT = 30;
 
   /// 현재 표시 중인 페이지의 인덱스
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
   User _user = new User();
 
@@ -218,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     auth = FirebaseAuth.instance;
-    setuid();
+    if (!Platform.isIOS) setuid();
   }
 
   @override
@@ -244,20 +245,55 @@ class _MyHomePageState extends State<MyHomePage> {
       // MagazinePage(),
     ];
 
-
     ///로그인 되어있는 상태면 바로 메인화면으로 가는 걸 구현할랬는데, 생각만큼 안나옴
+    /// 21-03-01 ios 에서 빌드해서 테스트하려니까 자꾸 앱이 강제종료가 되어 따로 테스트하겠슴다.
+
+    /// iOS 에서만 실행
+    /// 참고사이트 https://papabee.tistory.com/163?category=903336
+    if (Platform.isIOS) {
+      return StreamBuilder(
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
+          /// 데이터가 있을 경우 로그인이 되어있는 상태
+          if (snapshot.hasData) {
+            return Scaffold(
+              body: IndexedStack(
+                index: _currentIndex,
+                children: _pageList,
+              ),
+              drawer: NetworkingDrawer(context: context),
+              bottomNavigationBar: Container(
+                child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: _currentIndex,
+                  items: _navigationList,
+                  onTap: _onTaped,
+                ),
+              ),
+            );
+          }
+          /// 데이터가 없을 경우 로그인이 되어있지 않은 상태
+          else {
+            return LogInPage();
+          }
+        },
+      );
+    }
+    /// 안드로이드에서 실행
     return FutureBuilder(
       future: Firestore.instance.collection('Account').document(uid).get(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-        if (snapshot.hasError){
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
           return LogInPage();
         }
-        if (snapshot.connectionState == ConnectionState.done){
+        if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             body: IndexedStack(
               index: _currentIndex,
               children: _pageList,
             ),
+            drawer: NetworkingDrawer(context: context),
             bottomNavigationBar: Container(
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
@@ -323,7 +359,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 );
                  */
-
                 /// 팀 설정 페이지 테스트용으로 추가
                 Navigator.push(
                   context,
