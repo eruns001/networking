@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/data/data.dart';
+import 'package:networking/data/function.dart';
 
 import 'UploadQuestionPage.dart';
 
@@ -19,7 +21,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   int _counter = 0;
-  String dropdownValue = 'One';
+
 
 
   void _incrementCounter() {
@@ -113,22 +115,15 @@ class _SearchPageState extends State<SearchPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  ///Dropdown - 위치
                   DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
+                    value: dropdownValueAddress,
                     onChanged: (String newValue) {
                       setState(() {
-                        dropdownValue = newValue;
+                        dropdownValueAddress = newValue;
                       });
                     },
-                    items: <String>['One', 'Two', 'Free', 'Four']
+                    items: searchAddressList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -136,22 +131,16 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     }).toList(),
                   ),
+                  ///Dropdown - 역할
                   DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
+                    value: dropdownValueRole,
                     onChanged: (String newValue) {
                       setState(() {
-                        dropdownValue = newValue;
+                        dropdownValueRole = newValue;
+                        positionList = setPositionList(dropdownValueRole);
                       });
                     },
-                    items: <String>['One', 'Two', 'Free', 'Four']
+                    items: searchRoleList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -159,22 +148,16 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     }).toList(),
                   ),
+                  /*
+                  ///Dropdown - 분야
                   DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
+                    value: dropdownValuePosition,
                     onChanged: (String newValue) {
                       setState(() {
-                        dropdownValue = newValue;
+                        dropdownValuePosition = newValue;
                       });
                     },
-                    items: <String>['One', 'Two', 'Free', 'Four']
+                    items: positionList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -182,21 +165,14 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     }).toList(),
                   ),
+                   */
+                  ///Dropdown - 갯수
                   DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    style: TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
+                    value: dropdownValueNumber,
                     onChanged: (String newValue) {
-                      setState(
-                            () {
-                          dropdownValue = newValue;
-                        },
+                      setState(() {
+                        dropdownValueNumber = newValue;
+                      },
                       );
                     },
                     items: <String>['One', 'Two', 'Free', 'Four']
@@ -207,6 +183,11 @@ class _SearchPageState extends State<SearchPage> {
                       );
                     }).toList(),
                   )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                 ],
               ),
               for (var a = 0; a < _counter; a++)

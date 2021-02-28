@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,11 +7,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:networking/data/data.dart';
 import 'dart:io';
 
-Future network_function_getImage(String where, int _counter) async{
+import 'package:networking/page/SearchPage.dart';
+
+Future<String> network_function_getImage(String where, int _counter) async{
   File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
   StorageReference storageReference = FirebaseStorage.instance.ref()
       .child(where)
+      .child(uid)
       .child('${dateFormat.format(DateTime.now())}_${uid}_No$_counter.jpg');
   _counter ++;
 
@@ -19,7 +22,7 @@ Future network_function_getImage(String where, int _counter) async{
   StorageTaskSnapshot strageTask = await uploadTask.onComplete;
   String downloadURL = await strageTask.ref.getDownloadURL();
 
-
+  return downloadURL;
   /*
   if(uploadTask.isComplete){
     setState(() {
@@ -51,6 +54,7 @@ Future<bool> googleSingIn () async{
   }
 }
 
+
 Future<bool> signin(String email, String password) async {
   try{
     AuthResult result = await auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -64,6 +68,7 @@ Future<bool> signin(String email, String password) async {
     }
   }
 }
+
 
 Future<bool> signup(String email, String password) async {
   try{
@@ -79,6 +84,7 @@ Future<bool> signup(String email, String password) async {
   }
 }
 
+///로그아웃
 Future<bool> signOutUser() async {
   FirebaseUser user = await auth.currentUser();
   if(user.providerData[1].providerId == 'google.com'){
@@ -88,6 +94,7 @@ Future<bool> signOutUser() async {
   return Future.value(false);
 }
 
+///회원탈퇴
 Future<bool> WithdrawalUser() async {
   FirebaseUser user = await auth.currentUser();
 
@@ -100,3 +107,48 @@ Future<bool> WithdrawalUser() async {
   return Future.value(false);
 }
 
+///회원가입 된 상태인지 확인
+void IsLogin() {
+  var docRef = Firestore.instance.collection('Account').document(uid);
+  docRef.get();
+}
+
+
+///init
+Future<bool> setuid()async{
+  print("setuid");
+  FirebaseAuth.instance.currentUser().then((value) {
+    print("value : $value");
+    uid = value.uid;
+  });
+  return Future<bool>.value(true);
+}
+
+///SearchPage
+List<String> setPositionList(Role) {
+  List<String> PositionList = positionNullList;
+  switch(Role){
+    case "모든역할":
+      PositionList= positionNullList;
+      break;
+    case "SW 개발":
+      PositionList= positionDeveloperList;
+      break;
+    case "기획/PM/운영":
+      PositionList= positionPlannerList;
+      break;
+    case "마케팅":
+      PositionList= positionMarketingList;
+      break;
+    case "일러스트/디자인":
+      PositionList = positionDesignerList;
+      break;
+    case "영상/인터넷 방송":
+      PositionList = positionVideoList;
+      break;
+    case "음악":
+      PositionList = positionMusicList;
+      break;
+  }
+  return PositionList;
+}

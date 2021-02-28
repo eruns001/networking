@@ -1,9 +1,13 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'data/class/User.dart';
+import 'data/data.dart';
+import 'data/function.dart';
 import 'page/CommunityPage.dart';
 import 'page/EditProfilePage.dart';
 import 'page/LogInPage.dart';
@@ -131,6 +135,21 @@ class _MyHomePageState extends State<MyHomePage> {
     _user.setAddressGoon = '금정구';
   }
 
+  ///앱 첫실행때 한번 실행되는 함수
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    auth = FirebaseAuth.instance;
+    setuid();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     _createUser();
@@ -147,20 +166,29 @@ class _MyHomePageState extends State<MyHomePage> {
       // MagazinePage(),
     ];
 
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pageList,
-      ),
-      bottomNavigationBar: Container(
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          items: _navigationList,
-          onTap: _onTaped,
-        ),
-      ),
-      /*
+
+    ///로그인 되어있는 상태면 바로 메인화면으로 가는 걸 구현할랬는데, 생각만큼 안나옴
+    return FutureBuilder(
+      future: Firestore.instance.collection('Account').document(uid).get(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+        if (snapshot.hasError){
+          return LogInPage();
+        }
+        if (snapshot.connectionState == ConnectionState.done){
+          return Scaffold(
+            body: IndexedStack(
+              index: _currentIndex,
+              children: _pageList,
+            ),
+            bottomNavigationBar: Container(
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                currentIndex: _currentIndex,
+                items: _navigationList,
+                onTap: _onTaped,
+              ),
+            ),
+            /*
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(bottom: 10),
         child: Row(
@@ -233,6 +261,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
        */
+          );
+        }
+        return Text("loading");
+      },
     );
   }
 }
