@@ -62,5 +62,9 @@ GoogleSignIn _googleSignIn = new GoogleSignIn();
 String dropdownValueAddress = '모든지역';
 String dropdownValueRole = '모든역할';
 String dropdownValuePosition = '모든분야';
-String dropdownValueNumber = 'One';
+String dropdownValueNumber = '10';
 int searchPageCounter = 0;
+
+//url
+String imageUrl = '';
+String basicImageUrl ;

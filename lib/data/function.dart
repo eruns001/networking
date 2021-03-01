@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -20,15 +21,20 @@ Future<String> network_function_getImage(String where, int _counter) async{
 
   StorageUploadTask uploadTask = storageReference.putFile(image);
   StorageTaskSnapshot strageTask = await uploadTask.onComplete;
-  String downloadURL = await strageTask.ref.getDownloadURL();
+  //String downloadURL = await strageTask.ref.getDownloadURL();
+  strageTask.ref.getDownloadURL().then((value) {
+    print("from function value : $value");
+    imageUrl = value;
+    print("from function imageUrl : $imageUrl");
+    return value;
+  });
+}
 
-  return downloadURL;
-  /*
-  if(uploadTask.isComplete){
-    setState(() {
-      _downloadURL = downloadURL;
-    });
-  }*/
+///url 받아서 이미지 반환
+Widget returnImageFromUrl(String url){
+  return Image(
+      image:  NetworkImage(url),
+  );
 }
 
 Future<bool> googleSingIn () async{
@@ -97,7 +103,8 @@ Future<bool> signOutUser() async {
 ///회원탈퇴
 Future<bool> WithdrawalUser() async {
   FirebaseUser user = await auth.currentUser();
-  user.delete();
+  Firestore.instance.collection('Account').document(uid).delete();
+  await user.delete();
   if(user.providerData[1].providerId == 'google.com'){
     await gooleSignIn.disconnect();
   }
@@ -117,7 +124,9 @@ void IsLogin() {
 Future<bool> setuid()async{
   print("setuid");
   FirebaseAuth.instance.currentUser().then((value) {
-    print("value : $value");
+    print("from function value : ${value}");
+    basicImageUrl = value.photoUrl;
+    print("from function basicImageUrl : ${basicImageUrl}");
     uid = value.uid;
   });
   return Future<bool>.value(true);

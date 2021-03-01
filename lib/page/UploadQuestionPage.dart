@@ -54,11 +54,13 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
 
     StorageUploadTask uploadTask = storageReference.putFile(image);
     StorageTaskSnapshot strageTask = await uploadTask.onComplete;
-    String downloadURL = await strageTask.ref.getDownloadURL();
+    strageTask.ref.getDownloadURL().then((value) {
+      imageUrl = value;
+    });
 
     if(uploadTask.isComplete){
       setState(() {
-        _downloadURL = downloadURL;
+        _downloadURL = imageUrl;
       });
     }
   }

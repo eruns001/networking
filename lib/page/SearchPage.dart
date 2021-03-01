@@ -181,7 +181,7 @@ class _SearchPageState extends State<SearchPage> {
                       },
                       );
                     },
-                    items: <String>['One', 'Two', 'Free', 'Four']
+                    items: <String>['10', '20', '30', '40']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,

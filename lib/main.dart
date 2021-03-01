@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/page/NullPage.dart';
 import 'package:networking/page/UploadQuestionPage.dart';
 import 'package:networking/widget/NetworkingDrawer.dart';
 
@@ -242,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // EditProfilePage(user: _user), // 임시
       // HomePage(),
       CommunityPage(),
-      LoginLayoutPage(), // 임시
+      Nullpage(), // 임시
       // MagazinePage(),
     ];
 

@@ -32,9 +32,10 @@ class _SignUpPageState extends State<SignUpPage> {
   // TextEditingController _pwController = new TextEditingController();
   // TextEditingController _pwConfirmController = new TextEditingController();
 
-  var _signupimage;
-  Widget _signupImageWidget = UQP_icon_1st;
-  String _signupImageURL;
+  Widget _signupImageWidget = Image(image:  NetworkImage(basicImageUrl));
+
+  ///프로필 이미지 url
+  String _imageUrlController = basicImageUrl;
   ///닉네임
   TextEditingController _nickNameController = new TextEditingController();
   ///이름
@@ -107,29 +108,60 @@ class _SignUpPageState extends State<SignUpPage> {
               */
 
               ///프로필사진
-              net_Container(
-                child: IconButton(
-                  icon: _signupImageWidget,
-                  onPressed: () async{
-                    network_function_getImage('SingIn', 0);
-                  },
+              Container(
+                margin: EdgeInsets.only(top: _deviceHeight * 0.03),
+                child: Text(
+                  '프로필사진',
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-                margin: new EdgeInsets.symmetric(horizontal: _deviceWidth * (0.9/100)),
-                net_width: _deviceWidth * (24.9/100),
-                net_height: _deviceHeight * (12.1/100),
-                radius: UQP_radius_picadd,
               ),
-              /// 닉네임
-              SignUpTemplate(
-                controller: _nickNameController,
-                deviceHeight: _deviceHeight,
-                deviceWidth: _deviceWidth,
-                topMarginRatio: 0.03,
-                textInputType: TextInputType.text,
-                text: '새 닉네임',
-                hint: '닉네임을 작성해주세요',
-                onSubmitted: (String string) {},
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: _deviceHeight * 0.02),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _signupImageWidget,
+                          Container(
+                            margin: EdgeInsets.only(right: _deviceHeight * 0.02),
+                            child: FlatButton(
+                                minWidth: 20,
+                                child: Text(
+                                  '수정',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                onPressed: null
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+
+                  /// 닉네임
+                  Container(
+                    margin: EdgeInsets.only(right: _deviceHeight * 0.02),
+                    child: SignUpTemplate(
+                      controller: _nickNameController,
+                      deviceHeight: _deviceHeight,
+                      deviceWidth: _deviceWidth * 0.7,
+                      topMarginRatio: 0.03,
+                      textInputType: TextInputType.text,
+                      text: '새 닉네임',
+                      hint: '닉네임을 작성해주세요',
+                      onSubmitted: (String string) {},
+                    ),
+                  )
+                ],
               ),
+
               /// 이름
               SignUpTemplate(
                 controller: _nameController,
@@ -374,6 +406,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 String document = "$uid";
                 print("nickname : ${_nickNameController.text}");
                 await Firestore.instance.collection('Account').document(document).setData({
+                  'imageUrl' : _imageUrlController,
                   'nickName': _nickNameController.text,
                   'name': _nameController.text,
                   'contact' : _contactController.text,
@@ -458,7 +491,7 @@ class SignUpTemplate extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 14,
               ),
             ),
           ),
