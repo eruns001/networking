@@ -31,7 +31,6 @@ Future<String> network_function_getImage(String where, int _counter) async{
   }*/
 }
 
-
 Future<bool> googleSingIn () async{
   GoogleSignInAccount googleSignInAccount = await gooleSignIn.signIn();
 
@@ -55,7 +54,6 @@ Future<bool> googleSingIn () async{
   }
 }
 
-
 Future<bool> signin(String email, String password) async {
   try{
     AuthResult result = await auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -69,7 +67,6 @@ Future<bool> signin(String email, String password) async {
     }
   }
 }
-
 
 Future<bool> signup(String email, String password) async {
   try{
@@ -100,7 +97,6 @@ Future<bool> signOutUser() async {
 ///회원탈퇴
 Future<bool> WithdrawalUser() async {
   FirebaseUser user = await auth.currentUser();
-
   user.delete();
   if(user.providerData[1].providerId == 'google.com'){
     await gooleSignIn.disconnect();
@@ -154,4 +150,10 @@ List<String> setPositionList(Role) {
       break;
   }
   return PositionList;
+}
+
+///로그인 이후 회원정보 받아오기
+Future getAccount() async{
+
+
 }

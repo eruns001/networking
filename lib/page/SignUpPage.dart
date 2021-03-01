@@ -35,16 +35,28 @@ class _SignUpPageState extends State<SignUpPage> {
   var _signupimage;
   Widget _signupImageWidget = UQP_icon_1st;
   String _signupImageURL;
+  ///닉네임
   TextEditingController _nickNameController = new TextEditingController();
+  ///이름
   TextEditingController _nameController = new TextEditingController();
+  ///연락처
   TextEditingController _contactController = new TextEditingController();
+  ///주소
   String _addressController = '서울특별시';
+  ///역할
+  String _roleController = 'SW 개발';
+  ///분야
+  String positionController = "모든분야";
+  ///email
   TextEditingController _emailController = new TextEditingController();
+  ///커리어
+  TextEditingController _careerController = new TextEditingController();
 
   TextEditingController _birthController = new TextEditingController();
   bool _agree = false;
 
 
+  //TextEditingController temp = new TextEditingController();
   ///안쓰는 변수
   TextEditingController _pwController = new TextEditingController();
   TextEditingController _pwConfirmController = new TextEditingController();
@@ -112,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 controller: _nickNameController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
-                topMarginRatio: 0.04,
+                topMarginRatio: 0.03,
                 textInputType: TextInputType.text,
                 text: '새 닉네임',
                 hint: '닉네임을 작성해주세요',
@@ -123,10 +135,22 @@ class _SignUpPageState extends State<SignUpPage> {
                 controller: _nameController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
-                topMarginRatio: 0.045,
+                topMarginRatio: 0.03,
                 textInputType: TextInputType.text,
                 text: '이름',
                 hint: '이름을 작성해주세요',
+                onSubmitted: (String string) {},
+              ),
+              /// 연락처
+              SignUpTemplate(
+                controller: _contactController,
+                deviceHeight: _deviceHeight,
+                deviceWidth: _deviceWidth,
+                topMarginRatio: 0.03,
+                textInputType: TextInputType.phone,
+                maxLength: 11,
+                text: '연락처',
+                hint: 'EX) 01012345067',
                 onSubmitted: (String string) {},
               ),
               /// 이메일
@@ -140,17 +164,88 @@ class _SignUpPageState extends State<SignUpPage> {
                 hint: 'Ex) @GMAIL.COM',
                 onSubmitted: (String string) {},
               ),
+              ///경력
+              SignUpTemplate(
+                controller: _careerController,
+                deviceHeight: _deviceHeight,
+                deviceWidth: _deviceWidth * 0.4,
+                topMarginRatio: 0.03,
+                textInputType: TextInputType.number,
+                maxLength: 3,
+                text: '경력 (단위 : 년)',
+                hint: 'ex) 1',
+                onSubmitted: (String string) {},
+              ),
               /// 생년월일
               SignUpTemplate(
                 controller: _birthController,
                 deviceHeight: _deviceHeight,
                 deviceWidth: _deviceWidth,
-                topMarginRatio: 0.04,
+                topMarginRatio: 0.03,
                 textInputType: TextInputType.datetime,
                 maxLength: 6,
                 text: '생년월일',
                 hint: 'EX) 951010',
                 onSubmitted: (String string) {},
+              ),
+              ///역할
+              Container(
+                margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.014, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('역할'),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(_deviceWidth * 0.05, 0, 0, 0),
+                      child: DropdownButton(
+                        value: _roleController,
+                        items: roleList.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            _roleController = newValue;
+                            positionController = "모든분야";
+                            positionList = setPositionList(_roleController);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ///분야
+              Container(
+                margin: EdgeInsets.fromLTRB(0, _deviceHeight * 0.014, 0, 0),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      child: Text('분야'),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(_deviceWidth * 0.05, 0, 0, 0),
+                      child: DropdownButton<String>(
+                        value: positionController,
+                        onChanged: (String newValue) {
+                          setState(() {
+                            positionController = newValue;
+                          });
+                        },
+                        items: positionList
+                            .map<DropdownMenuItem<String>>((String newValue) {
+                          return DropdownMenuItem<String>(
+                            value: newValue,
+                            child: Text(newValue),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               /// 주소
               Container(
@@ -274,15 +369,20 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Image.asset('images/signUp_btn_next.png'),
               onPressed: () async {
                 IsLogIn = true;
-                //firebase에 입력
+
+                ///firebase에 입력
                 String document = "$uid";
                 print("nickname : ${_nickNameController.text}");
                 await Firestore.instance.collection('Account').document(document).setData({
                   'nickName': _nickNameController.text,
                   'name': _nameController.text,
+                  'contact' : _contactController.text,
                   'birth':_birthController.text,
                   'address':_addressController,
                   'e_mail':_emailController.text,
+                  'career': _careerController.text,
+                  'roll':_roleController,
+                  'position':positionController,
                 });
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
               },

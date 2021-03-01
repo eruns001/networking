@@ -42,6 +42,8 @@ class _LogInState extends State<LogInPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            /*
+            ///로그인 버튼
             Container(
               margin: new EdgeInsets.only(bottom: _device_height * (2 / 100)),
               child: FlatButton(
@@ -54,6 +56,7 @@ class _LogInState extends State<LogInPage> {
                 ),
               ),
             ),
+            ///새계정 만들기 버튼
             Container(
               margin: new EdgeInsets.only(bottom: _device_height * (2 / 100)),
               child: FlatButton(
@@ -66,8 +69,9 @@ class _LogInState extends State<LogInPage> {
                 ),
               ),
             ),
+            */
             Container(
-              margin: new EdgeInsets.only(bottom: _device_height * (2 / 100)),
+              //margin: new EdgeInsets.only(bottom: _device_height * (2 / 100)),
               child: SignInButton(
                 Buttons.Google,
                 onPressed: () async {

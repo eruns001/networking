@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/data/data.dart';
+import 'package:networking/data/function.dart';
 
 // ignore: non_constant_identifier_names
 Drawer NetworkingDrawer({
@@ -34,6 +35,7 @@ Drawer NetworkingDrawer({
                   child: Image.asset('images/loginLayout_logo.png'),
                 ),
 
+                /*
                 /// 메뉴 아이콘
                 Container(
                   height: _deviceHeight * 0.041,
@@ -45,6 +47,7 @@ Drawer NetworkingDrawer({
                     },
                   ),
                 ),
+                 */
               ],
             ),
           ),
@@ -60,7 +63,9 @@ Drawer NetworkingDrawer({
                 ),
               ),
               onPressed: () async {
-                await showDialog(
+                await WithdrawalUser();
+                /*
+                showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     gooleSignIn.signOut().whenComplete(
@@ -79,6 +84,7 @@ Drawer NetworkingDrawer({
                     );
                   },
                 );
+                 */
               },
             ),
           ),

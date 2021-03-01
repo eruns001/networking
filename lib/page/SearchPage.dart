@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/data/data.dart';
 import 'package:networking/data/function.dart';
+import 'package:networking/widget/NetworkingAppBar.dart';
 
 import 'UploadQuestionPage.dart';
 
@@ -20,9 +21,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  int _counter = 0;
-
-
 
   void _incrementCounter() {
     setState(() {
@@ -31,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      searchPageCounter++;
     });
   }
 
@@ -44,7 +42,9 @@ class _SearchPageState extends State<SearchPage> {
     double _device_height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: NetworkingAppBar(context: context, deviceHeight: _device_height, deviceWidth: _device_width, title: null, stackIndex: 0),
+      /*
+      PreferredSize(
         preferredSize: Size.fromHeight(60.0),
         child: AppBar(
             brightness: Brightness.light,
@@ -57,6 +57,7 @@ class _SearchPageState extends State<SearchPage> {
               height: 500,
               child: Row(
                 children: <Widget>[
+                  ///선 세개
                   IconButton(
                       padding: EdgeInsets.only(left: 30, right: 25),
                       icon: Icon(
@@ -64,12 +65,15 @@ class _SearchPageState extends State<SearchPage> {
                         color: const Color(0xff46abdb),
                         size: 50,
                       ),
-                      onPressed: null),
+                      onPressed: (){
+                        //Scaffold.of(context).openDrawer();
+                      }),
+                  ///검색창
                   new Flexible(
                     child: TextFormField(
                       controller: searchTextEditingController,
                       decoration: InputDecoration(
-                        hintText: '$_counter', //'검색어를 입력해 주세요.',
+                        hintText: '$searchPageCounter', //'검색어를 입력해 주세요.',
                         hintStyle: TextStyle(
                           color: const Color(0xffa2d5ed),
                         ),
@@ -89,6 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                       onFieldSubmitted: null,
                     ),
                   ),
+                  ///새글
                   IconButton(
                       padding: EdgeInsets.only(left: 20, right: 25),
                       icon: Icon(
@@ -107,6 +112,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
             )),
       ),
+      */
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -190,7 +196,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                 ],
               ),
-              for (var a = 0; a < _counter; a++)
+              for (var a = 0; a < searchPageCounter; a++)
                 temp(_device_width, _device_height),
             ],
           ),

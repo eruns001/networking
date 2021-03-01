@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:networking/page/UploadQuestionPage.dart';
 import 'package:networking/widget/NetworkingDrawer.dart';
 
 import 'data/class/Member.dart';
@@ -248,46 +249,12 @@ class _MyHomePageState extends State<MyHomePage> {
     ///로그인 되어있는 상태면 바로 메인화면으로 가는 걸 구현할랬는데, 생각만큼 안나옴
     /// 21-03-01 ios 에서 빌드해서 테스트하려니까 자꾸 앱이 강제종료가 되어 따로 테스트하겠슴다.
 
-    /// iOS 에서만 실행
     /// 참고사이트 https://papabee.tistory.com/163?category=903336
-    if (Platform.isIOS) {
-      return StreamBuilder(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
-          /// 데이터가 있을 경우 로그인이 되어있는 상태
-          if (snapshot.hasData) {
-            return Scaffold(
-              body: IndexedStack(
-                index: _currentIndex,
-                children: _pageList,
-              ),
-              drawer: NetworkingDrawer(context: context),
-              bottomNavigationBar: Container(
-                child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  currentIndex: _currentIndex,
-                  items: _navigationList,
-                  onTap: _onTaped,
-                ),
-              ),
-            );
-          }
-          /// 데이터가 없을 경우 로그인이 되어있지 않은 상태
-          else {
-            return LogInPage();
-          }
-        },
-      );
-    }
-    /// 안드로이드에서 실행
-    return FutureBuilder(
-      future: Firestore.instance.collection('Account').document(uid).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return LogInPage();
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
+        /// 데이터가 있을 경우 로그인이 되어있는 상태
+        if (snapshot.hasData) {
           return Scaffold(
             body: IndexedStack(
               index: _currentIndex,
@@ -302,81 +269,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: _onTaped,
               ),
             ),
-            /*
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            //btn_home
-            IconButton(
-              iconSize: 50,
-              color: const Color(0xff46abdb),
-              icon: new Image.asset('images/search_btn_home.png'),
-              onPressed: () {
-                _currentIndex = 0;
-                setState(() {});
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_insert_user.png'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LogInPage()),
-                );
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_search.png'),
-              onPressed: () {
-                /// 계정찾기 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return LoginLayoutPage();
-                    },
-                  ),
-                );
-              },
-            ),
-            IconButton(
-              iconSize: 50,
-              icon: new Image.asset('images/search_btn_mypage.png'),
-              onPressed: () {
-                /*
-                /// 커뮤니티 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return CommunityPage();
-                    },
-                  ),
-                );
-                 */
-                /// 팀 설정 페이지 테스트용으로 추가
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) {
-                      return TeamConfigPage();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-       */
           );
         }
-        return Text("loading");
+        /// 데이터가 없을 경우 로그인이 되어있지 않은 상태
+        else {
+          return LogInPage();
+        }
       },
     );
   }
