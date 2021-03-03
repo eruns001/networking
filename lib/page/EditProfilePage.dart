@@ -279,6 +279,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         deviceWidth: _deviceWidth,
         context: context,
         title: '내 프로필 수정',
+        stackIndex: 1,
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );

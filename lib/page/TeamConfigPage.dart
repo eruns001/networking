@@ -238,6 +238,7 @@ class _TeamConfigPageState extends State<TeamConfigPage> {
         deviceWidth: _deviceWidth,
         context: context,
         title: 'My TEAM',
+        stackIndex: 1,
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );

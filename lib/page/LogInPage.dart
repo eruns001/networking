@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,9 +81,10 @@ class _LogInState extends State<LogInPage> {
                     /// 그냥 Navigator.pop(context) 를 사용하면 로딩화면이 사라지지 않아서
                     /// 이 방법으로 진행했습니다.
                     /// 출처 https://stackoverflow.com/questions/50683524/how-to-dismiss-flutter-dialog
+
                     BuildContext _dialogContext;
 
-                    /// 로딩화면 출력
+                    /// 인디케이터 출력
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -96,49 +95,24 @@ class _LogInState extends State<LogInPage> {
                       },
                     );
 
-                    /// 구글 로그인 실행
-                    bool _logInResult = await googleSingIn();
+                    /// 구글 로그인 진행
+                    googleSingIn().then(
+                      (bool _result) async {
+                        FirebaseUser user =
+                            await FirebaseAuth.instance.currentUser();
 
-                    /// 로그인을 하지 않았을 경우를 대비한 구문
-                    if(_logInResult != true) {
-                      Navigator.pop(_dialogContext);
-                      return;
-                    }
-
-                    /// 로그인 한 것을 바탕으로 유저 정보 불러옴
-                    FirebaseUser _user =
-                        await FirebaseAuth.instance.currentUser();
-                    String _uid = _user.uid;
-
-                    /// 해당 유저의 폴더가 존재하는지 판별할 변수
-                    DocumentSnapshot _result;
-
-                    /// 해당 유저의 폴더를 가져옴
-                    await Firestore.instance
-                        .collection('Account')
-                        .document(_uid)
-                        .get()
-                        .then(
-                      (DocumentSnapshot documentSnapshot) {
-                        _result = documentSnapshot;
                         Navigator.pop(_dialogContext);
+
+                        if (user != null) {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => SignUpPage()));
+                        } else {
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              builder: (context) => MyHomePage()));
+                        }
                       },
                     );
-
-                    /// test 용 구문
-                    log('${_result.data.length}');
-
-                    /// 해당 유저의 폴더가 존재할 경우 가입을 했던 것으로 간주.
-                    if (_result.exists) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MyHomePage()));
-                    }
-                    /// 해당 유저의 폴더가 존재하지 않을 경우 가입을 하지 않은 것으로 간주.
-                    /// 가입하는 페이지에 닫기 버튼이 있어서 로그인 화면을 남겨뒀습니다.
-                    else {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUpPage()));
-                    }
                   } else {
                     googleSingIn().whenComplete(
                       () async {
