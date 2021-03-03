@@ -15,6 +15,7 @@ import 'data/class/User.dart';
 import 'data/data.dart';
 import 'data/function.dart';
 import 'page/CommunityPage.dart';
+import 'page/HomePage.dart';
 import 'page/LogInPage.dart';
 import 'page/LoginLayoutPage.dart';
 import 'page/MyProfilePage.dart';
@@ -221,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     auth = FirebaseAuth.instance;
-    if (!Platform.isIOS) setuid();
+    setuid();
   }
 
   @override
@@ -239,9 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> _pageList = <Widget>[
       SearchPage(),
       MyProfilePage(user: _user),
-      LogInPage(), // 임시
-      // EditProfilePage(user: _user), // 임시
-      // HomePage(),
+      HomePage(),
       CommunityPage(),
       Nullpage(), // 임시
       // MagazinePage(),

@@ -197,6 +197,7 @@ class _MyTeamMemberVerState extends State<MyTeamMemberVer> {
         deviceWidth: _deviceWidth,
         context: context,
         title: 'MY TEAM',
+        stackIndex: 1,
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );

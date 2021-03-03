@@ -205,6 +205,7 @@ class _MyTeamAdminVerState extends State<MyTeamAdminVer> {
         deviceWidth: _deviceWidth,
         context: context,
         title: 'MY TEAM',
+        stackIndex: 1,
       ),
       body: _buildPage(_deviceHeight, _deviceWidth),
     );

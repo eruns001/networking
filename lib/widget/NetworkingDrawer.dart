@@ -52,6 +52,66 @@ Drawer NetworkingDrawer({
             ),
           ),
 
+          /// 분할선
+          Divider(),
+
+          /// 내 팀
+          NetworkingDrawerMenu(
+            deviceHeight: _deviceHeight,
+            deviceWidth: _deviceWidth,
+            title: '내 팀',
+            imageDirectory: 'images/drawer_icon_myTeam.png',
+            onPressed: () {},
+          ),
+
+          /// 분할선
+          Divider(),
+
+          /// 알림
+          NetworkingDrawerMenu(
+            deviceHeight: _deviceHeight,
+            deviceWidth: _deviceWidth,
+            title: '알림',
+            imageDirectory: 'images/drawer_icon_alarm.png',
+            onPressed: () {},
+          ),
+
+          /// 공지사항
+          NetworkingDrawerMenu(
+            deviceHeight: _deviceHeight,
+            deviceWidth: _deviceWidth,
+            title: '공지사항',
+            imageDirectory: 'images/drawer_icon_notice.png',
+            onPressed: () {},
+          ),
+
+          /// 분할선
+          Divider(),
+
+          /// 설정
+          NetworkingDrawerMenu(
+            deviceHeight: _deviceHeight,
+            deviceWidth: _deviceWidth,
+            title: '설정',
+            imageDirectory: 'images/drawer_icon_setting.png',
+            onPressed: () {},
+          ),
+
+          /// 고객센터
+          NetworkingDrawerMenu(
+            deviceHeight: _deviceHeight,
+            deviceWidth: _deviceWidth,
+            title: '고객센터',
+            imageDirectory: 'images/drawer_icon_service.png',
+            onPressed: () {},
+          ),
+
+          /// 분할선
+          Divider(),
+
+          /// TUNE IN 정보
+          //NetworkingDrawerMenu(),
+
           /// 테스트용으로 넣은 로그아웃
           Container(
             height: 50,
@@ -63,8 +123,6 @@ Drawer NetworkingDrawer({
                 ),
               ),
               onPressed: () async {
-                await WithdrawalUser();
-                /*
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -84,7 +142,25 @@ Drawer NetworkingDrawer({
                     );
                   },
                 );
-                 */
+              },
+            ),
+          ),
+
+          /// 분할선
+          Divider(),
+
+          /// 테스트용으로 넣은 회원탈퇴
+          Container(
+            height: 50,
+            child: CupertinoButton(
+              child: Text(
+                '회원탈퇴',
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              onPressed: () async {
+                await WithdrawalUser();
               },
             ),
           ),
@@ -92,4 +168,52 @@ Drawer NetworkingDrawer({
       ),
     ),
   );
+}
+
+class NetworkingDrawerMenu extends StatelessWidget {
+  NetworkingDrawerMenu({
+    Key key,
+    @required double deviceHeight,
+    @required double deviceWidth,
+    @required String imageDirectory,
+    @required String title,
+    @required Function onPressed,
+  })  : _deviceHeight = deviceHeight,
+        _deviceWidth = deviceWidth,
+        _imageDirectory = imageDirectory,
+        _title = title,
+        _onPressed = onPressed,
+        super(key: key);
+
+  final double _deviceHeight;
+  final double _deviceWidth;
+  final String _imageDirectory;
+  final String _title;
+  final Function _onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: Row(
+        children: <Widget>[
+          Container(
+            height: _deviceWidth * 0.1,
+            width: _deviceWidth * 0.1,
+            child: (_imageDirectory == null) ? null : Image.asset(_imageDirectory),
+          ),
+          Container(
+            margin: EdgeInsets.fromLTRB(_deviceWidth * 0.025, 0, 0, 0),
+            child: Text(
+              _title,
+              textScaleFactor: 0.82,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+      onPressed: _onPressed,
+    );
+  }
 }

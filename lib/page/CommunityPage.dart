@@ -235,6 +235,7 @@ class _CommunityPageState extends State<CommunityPage> {
         deviceWidth: _deviceWidth,
         context: context,
         title: '커뮤니티',
+        stackIndex: 1,
       ),
       body: (_isLoadingInit)
           ? _buildLoading(_deviceHeight, _deviceWidth)
