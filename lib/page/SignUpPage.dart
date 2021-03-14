@@ -32,7 +32,9 @@ class _SignUpPageState extends State<SignUpPage> {
   // TextEditingController _pwController = new TextEditingController();
   // TextEditingController _pwConfirmController = new TextEditingController();
 
-  Widget _signupImageWidget = Image(image:  NetworkImage(basicImageUrl));
+  Widget _signupImageWidget = ClipOval(
+    child: Image(image:  NetworkImage(basicImageUrl)),
+  );
 
   ///프로필 이미지 url
   String _imageUrlController = basicImageUrl;

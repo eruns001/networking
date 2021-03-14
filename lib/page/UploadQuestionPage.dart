@@ -285,6 +285,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
           ),
         ),
       ),
+
       /*
       bottomNavigationBar: Container(
         padding: EdgeInsets.only(bottom: 10),
@@ -312,6 +313,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
         ),
       ),// This trailing comma makes auto-formatting nicer for build methods.
        */
+
     );
   }
 }

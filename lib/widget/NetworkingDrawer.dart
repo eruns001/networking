@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:networking/data/data.dart';
 import 'package:networking/data/function.dart';
 
+import '../main.dart';
+
 // ignore: non_constant_identifier_names
 Drawer NetworkingDrawer({
   @required BuildContext context,
@@ -60,7 +62,7 @@ Drawer NetworkingDrawer({
             deviceHeight: _deviceHeight,
             deviceWidth: _deviceWidth,
             title: '내 팀',
-            imageDirectory: 'images/drawer_icon_myTeam.png',
+            imageDirectory: Image.asset('images/drawer_icon_myTeam.png'),
             onPressed: () {},
           ),
 
@@ -72,7 +74,11 @@ Drawer NetworkingDrawer({
             deviceHeight: _deviceHeight,
             deviceWidth: _deviceWidth,
             title: '알림',
-            imageDirectory: 'images/drawer_icon_alarm.png',
+            imageDirectory: Icon(
+              Icons.add_alert,
+              color: const Color(0xff5d9023),
+              size: 30,
+            ),
             onPressed: () {},
           ),
 
@@ -81,7 +87,7 @@ Drawer NetworkingDrawer({
             deviceHeight: _deviceHeight,
             deviceWidth: _deviceWidth,
             title: '공지사항',
-            imageDirectory: 'images/drawer_icon_notice.png',
+            imageDirectory: Image.asset('images/drawer_icon_notice.png'),
             onPressed: () {},
           ),
 
@@ -93,7 +99,7 @@ Drawer NetworkingDrawer({
             deviceHeight: _deviceHeight,
             deviceWidth: _deviceWidth,
             title: '설정',
-            imageDirectory: 'images/drawer_icon_setting.png',
+            imageDirectory: Image.asset('images/drawer_icon_setting.png'),
             onPressed: () {},
           ),
 
@@ -102,7 +108,7 @@ Drawer NetworkingDrawer({
             deviceHeight: _deviceHeight,
             deviceWidth: _deviceWidth,
             title: '고객센터',
-            imageDirectory: 'images/drawer_icon_service.png',
+            imageDirectory: Image.asset('images/drawer_icon_service.png'),
             onPressed: () {},
           ),
 
@@ -161,6 +167,7 @@ Drawer NetworkingDrawer({
               ),
               onPressed: () async {
                 await WithdrawalUser();
+                //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
               },
             ),
           ),
@@ -175,7 +182,7 @@ class NetworkingDrawerMenu extends StatelessWidget {
     Key key,
     @required double deviceHeight,
     @required double deviceWidth,
-    @required String imageDirectory,
+    @required Widget imageDirectory,
     @required String title,
     @required Function onPressed,
   })  : _deviceHeight = deviceHeight,
@@ -187,7 +194,7 @@ class NetworkingDrawerMenu extends StatelessWidget {
 
   final double _deviceHeight;
   final double _deviceWidth;
-  final String _imageDirectory;
+  final Widget _imageDirectory;
   final String _title;
   final Function _onPressed;
 
@@ -199,7 +206,7 @@ class NetworkingDrawerMenu extends StatelessWidget {
           Container(
             height: _deviceWidth * 0.1,
             width: _deviceWidth * 0.1,
-            child: (_imageDirectory == null) ? null : Image.asset(_imageDirectory),
+            child: (_imageDirectory == null) ? null : _imageDirectory,
           ),
           Container(
             margin: EdgeInsets.fromLTRB(_deviceWidth * 0.025, 0, 0, 0),
