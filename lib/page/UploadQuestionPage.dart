@@ -30,6 +30,15 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   String _downloadURL = "upload";
 
+  ///작성자
+  String _uqpControllerWriter = uid;
+  ///제목
+  TextEditingController _uqpControllerTitle = new TextEditingController();
+  ///요약
+  TextEditingController _uqpControllerSummarize = new TextEditingController();
+  ///내용
+  TextEditingController _uqpControllerContents = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -203,6 +212,19 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                     net_width: _device_width * (68.8/100),
                     net_height: _device_height * (UQP_height_text/100),
                     radius: UQP_radius_textadd,
+                    child: Center(
+                      child: TextField(
+                        controller: _uqpControllerTitle,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          counterText: '',
+                          contentPadding:
+                          EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
+                          hintText: '제목을 입력해 주세요.',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -254,6 +276,17 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                     net_width: _device_width * (68.8/100),
                     net_height: _device_height * (23.0/100),
                     radius: UQP_radius_textadd,
+                    child: TextField(
+                      controller: _uqpControllerTitle,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        contentPadding:
+                        EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
+                        hintText: '내용을 입력해 주세요.',
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -317,4 +350,3 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
     );
   }
 }
-
