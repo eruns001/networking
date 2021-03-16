@@ -1,20 +1,24 @@
 
 import 'package:flutter/material.dart';
 
-class net_Container extends StatelessWidget {
-  net_Container ({
-    @required this.net_width,
-    @required this.net_height,
+class uqpContainer extends StatelessWidget {
+  uqpContainer ({
+    @required this.deviceWidth,
+    @required this.deviceHeight,
     @required this.radius,
-    this.child,
+    @required this.textEditingController,
     this.margin,
+    this.textInputType,
+    this.hintText,
   }) : assert(margin == null || margin.isNonNegative);
 
-  final double net_width;
-  final double net_height;
+  final double deviceWidth;
+  final double deviceHeight;
   final double radius;
-  final Widget child;
   final EdgeInsetsGeometry margin;
+  final TextEditingController textEditingController;
+  final TextInputType textInputType;
+  String hintText;
 
 
   @override
@@ -22,10 +26,10 @@ class net_Container extends StatelessWidget {
 
     // TODO: implement build
     return Container(
-      margin: margin,
-      height: net_height,
-      width: net_width,
-      decoration: BoxDecoration(
+        margin: margin,
+        width: deviceWidth * 0.688,
+        height: deviceHeight * 0.05,
+        decoration: BoxDecoration(
           border: Border.all(
               color: const Color(0xff46abdb),
               width: 1),
@@ -39,7 +43,19 @@ class net_Container extends StatelessWidget {
           ],
           color: const Color(0xffe3f3fa),
       ),
-      child: child
+      child: Center(
+        child: TextField(
+          controller: textEditingController,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            counterText: '',
+            contentPadding:
+            EdgeInsets.fromLTRB(deviceWidth * 0.05, 0, 0, 0),
+            hintText: hintText,
+            border: InputBorder.none,
+          ),
+        ),
+      )
     );
   }
 }

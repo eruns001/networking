@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:networking/data/data.dart';
@@ -137,7 +138,6 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                         size: 40,
                       ),
                       onPressed: (){
-
                       }
                   ),
                 ],
@@ -150,7 +150,8 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              //picRow
+              ///picRow
+              /*
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -190,10 +191,58 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                   ),
                 ],
               ),
+              */
+
+              FutureBuilder(
+                  future: Firestore.instance.collection('Account').document(uid).get(),
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+                    if (snapshot.data != null){
+                      Map<String, dynamic> data = snapshot.data.data;
+                      return Container(
+                        margin: EdgeInsets.only(left: _device_width * 0.065, top: _device_height * 0.06),
+                        child: Row(
+                          children: [
+                            ClipOval(
+                              child: Image.network(
+                                data["imageUrl"],
+                                loadingBuilder: (
+                                    BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent event,
+                                    ) {
+                                  if (event == null) {
+                                    return child;
+                                  } else {
+                                    return Center(
+                                      child: CupertinoActivityIndicator(),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                data["roll"],
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              margin: EdgeInsets.only(left: _device_width * 0.03),
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                    return Center(
+                      child: CupertinoActivityIndicator(),
+                    );
+                  }
+              ),
+
               SizedBox(
                 height: _device_width * (UQP_margin_text/100),
               ),
-              //titleRow
+              ///titleRow
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -207,11 +256,16 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                       fontSize: 20,
                     ), //textAlign: TextAlign.center
                   ),
-                  net_Container(
+                  uqpContainer(
                     margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    net_width: _device_width * (68.8/100),
-                    net_height: _device_height * (UQP_height_text/100),
+                    deviceWidth: _device_width,
+                    deviceHeight: _device_height,
                     radius: UQP_radius_textadd,
+                    textEditingController: _uqpControllerTitle,
+                    textInputType: TextInputType.text,
+                    hintText: '제목을 입력해주세요',
+
+                    /*
                     child: Center(
                       child: TextField(
                         controller: _uqpControllerTitle,
@@ -225,6 +279,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                         ),
                       ),
                     )
+                      */
                   ),
                 ],
               ),
@@ -245,11 +300,12 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                       fontSize: 20,
                     ), //textAlign: TextAlign.center
                   ),
-                  net_Container(
+                  uqpContainer(
                     margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    net_width: _device_width * (68.8/100),
-                    net_height: _device_height * (UQP_height_text/100),
+                    deviceWidth: _device_width * (68.8/100),
+                    deviceHeight: _device_height * (UQP_height_text/100),
                     radius: UQP_radius_textadd,
+                    textEditingController: _uqpControllerSummarize,
                   ),
                 ],
               ),
@@ -271,6 +327,7 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                       fontSize: 20,
                     ), //textAlign: TextAlign.center
                   ),
+                  /*
                   net_Container(
                     margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
                     net_width: _device_width * (68.8/100),
@@ -288,6 +345,8 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                       ),
                     ),
                   ),
+
+                   */
                 ],
               ),
               SizedBox(
@@ -306,12 +365,15 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                       fontSize: 20,
                     ), //textAlign: TextAlign.center
                   ),
+                  /*
                   net_Container(
                     margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
                     net_width: _device_width * (68.8/100),
                     net_height: _device_height * (UQP_height_text/100),
                     radius: UQP_radius_textadd,
                   ),
+
+                   */
                 ],
               ),
             ],
