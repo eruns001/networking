@@ -70,3 +70,12 @@ int searchPageCounter = 0;
 //url
 String imageUrl = '';
 String basicImageUrl ;
+
+//TextStyle
+TextStyle uqpHintTextStyle = TextStyle(
+  color: const Color(0xff999999),
+  fontWeight: FontWeight.w500,
+  fontFamily: "NotoSansKR",
+  fontStyle:  FontStyle.normal,
+  fontSize: 16,
+);

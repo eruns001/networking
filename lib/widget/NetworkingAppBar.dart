@@ -13,7 +13,31 @@ AppBar NetworkingAppBar({
   @required int stackIndex,
   Function onPressedBurger,
   Function onPressedAlarm,
+  Widget rightButtonIcon,
+  Widget leftButton,
 }) {
+
+  rightButtonIcon = rightButtonIcon != null ?
+  rightButtonIcon :
+  CupertinoButton(
+    padding: EdgeInsets.zero,
+    child: Image.asset('images/appbar_btn_alarm.png'),
+    onPressed: onPressedAlarm,
+  );
+
+  leftButton = leftButton != null ?
+  leftButton :
+  IconButton(
+      padding: EdgeInsets.only(left: 30, right: 25),
+      icon: Icon(
+        CupertinoIcons.bars,
+        color: const Color(0xff46abdb),
+        size: 50,
+      ),
+      onPressed: (){
+        Scaffold.of(context).openDrawer();
+      }
+  );
 
   ///searchPage일 경우 Appbar
   if(stackIndex == 0){
@@ -103,42 +127,26 @@ AppBar NetworkingAppBar({
       titleSpacing: 0,
       */
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          IconButton(
-              padding: EdgeInsets.only(left: 30, right: 25),
-              icon: Icon(
-                CupertinoIcons.bars,
-                color: const Color(0xff46abdb),
-                size: 50,
-              ),
-              onPressed: (){
-                Scaffold.of(context).openDrawer();
-              }
-          ),
+          leftButton,
           Expanded(
-            child: Container(
-              alignment: Alignment.center,
+            child: Center(
               child: Text(
                 title,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: const Color(0xff46abdb),
                 ),
               ),
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: deviceWidth * 0.02, right: deviceWidth * 0.04),
             /*EdgeInsets.fromLTRB(
                 deviceWidth * 0.02, 0, deviceWidth * 0.111, 0),
-
              */
             height: deviceHeight * 0.041,
-            width: deviceWidth * 0.075,
-            child: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: Image.asset('images/appbar_btn_alarm.png'),
-              onPressed: onPressedAlarm,
-            ),
+            width: deviceWidth * 0.15,
+            child: rightButtonIcon
           ),
         ],
       ),

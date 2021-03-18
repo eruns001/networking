@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:networking/data/data.dart';
+import 'package:networking/widget/NetworkingAppBar.dart';
 import 'package:networking/widget/net_Container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:developer';
@@ -75,6 +76,24 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
     }
   }
 
+  Future _uqpPostUpload() async{
+    var now = new DateTime.now();
+    String nickName;
+    String document = "${uid}__${now.toString()}";
+    await Firestore.instance.collection('Account').document(uid).get().then((DocumentSnapshot ds) {
+      nickName = ds.data["nickName"];
+    });
+    await Firestore.instance.collection('uqpPost').document(document).setData({
+      'Writer_uid':uid,
+      'Writer':nickName,
+      'Title':_uqpControllerTitle.text,
+      'Summarize':_uqpControllerSummarize.text,
+      'Contents':_uqpControllerContents.text,
+      'Time' : now.toString(),
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     //화면 크기 체크
@@ -84,67 +103,40 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
     double _device_height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: AppBar(
-            centerTitle: true,
-            titleSpacing: -5,
-            backgroundColor: Colors.white.withOpacity(0.0),
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            title:SizedBox(
-              height: 500,
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                      padding: EdgeInsets.only(left: 30, right: 25),
-                      icon: Icon(
-                        CupertinoIcons.bars,
-                        color:  const Color(0xff46abdb),
-                        size: 50,
-                      ),
-                      onPressed: (){
-                      }),
-                  new Flexible(
-                    child:
-                    TextFormField(
-                      controller: searchTextEditingController,
-                      decoration: InputDecoration(
-                        hintText: _downloadURL,
-                        hintStyle:TextStyle(
-                          color: const Color(0xffa2d5ed),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: const Color(0xff46abdb))
-                        ),
-                        suffixIcon: Icon(
-                          CupertinoIcons.search,
-                          color:  const Color(0xff46abdb),
-                          size: 30,
-                        ),
-                      ),
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: const Color(0xffa2d5ed),
-                      ),
-                      onFieldSubmitted: null,
-                    ),
-                  ),
-                  IconButton(
-                      padding: EdgeInsets.only(left: 20, right: 25),
-                      icon: Icon(
-                        CupertinoIcons.doc,
-                        color:  const Color(0xff46abdb),
-                        size: 40,
-                      ),
-                      onPressed: (){
-                      }
-                  ),
-                ],
+      appBar: NetworkingAppBar(
+        context: context,
+        deviceHeight: _device_height,
+        deviceWidth: _device_width,
+        title: '게시글 작성하기',
+        stackIndex: 1,
+        rightButtonIcon: Container(
+            width: _device_width * 0.073,
+            child: FlatButton(
+                child: Text(
+                  "작성",
+                  style: TextStyle( color: const Color(0xff46abdb),),
+                ),
+                onPressed: () async{
+                  await _uqpPostUpload();
+                  Navigator.pop(context);
+                },
+            ),
+          ),
+        leftButton: Container(
+          margin: EdgeInsets.only(left: _device_width * 0.02),
+          child: IconButton(
+              icon: Icon(
+                CupertinoIcons.chevron_left,
+                color: const Color(0xff46abdb),
+                size: 35,
               ),
-            )
+              onPressed: (){
+                Navigator.pop(context);
+              }
+          ),
         ),
       ),
+
       body:SingleChildScrollView (
         child:Center(
           child: Column(
@@ -193,221 +185,157 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
               ),
               */
 
-              FutureBuilder(
-                  future: Firestore.instance.collection('Account').document(uid).get(),
-                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-                    if (snapshot.data != null){
-                      Map<String, dynamic> data = snapshot.data.data;
-                      return Container(
-                        margin: EdgeInsets.only(left: _device_width * 0.065, top: _device_height * 0.06),
-                        child: Row(
-                          children: [
-                            ClipOval(
-                              child: Image.network(
-                                data["imageUrl"],
-                                loadingBuilder: (
-                                    BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent event,
-                                    ) {
-                                  if (event == null) {
-                                    return child;
-                                  } else {
-                                    return Center(
-                                      child: CupertinoActivityIndicator(),
-                                    );
-                                  }
-                                },
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                data["roll"],
-                                style: TextStyle(
-                                  fontSize: 20,
+
+              ///작성자 프로필사진 + 작성자 역할
+              Container(
+                child: FutureBuilder(
+                    future: Firestore.instance.collection('Account').document(uid).get(),
+                    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+                      if (snapshot.data != null){
+                        Map<String, dynamic> data = snapshot.data.data;
+                        return Container(
+                          margin: EdgeInsets.only(left: _device_width * 0.065, top: _device_height * 0.06),
+                          child: Row(
+                            children: [
+                              ClipOval(
+                                child: Image.network(
+                                  data["imageUrl"],
+                                  loadingBuilder: (
+                                      BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent event,
+                                      ) {
+                                    if (event == null) {
+                                      return child;
+                                    } else {
+                                      return Center(
+                                        child: CupertinoActivityIndicator(),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
-                              margin: EdgeInsets.only(left: _device_width * 0.03),
-                            )
-                          ],
-                        ),
+                              Container(
+                                child: Text(
+                                  data["roll"],
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                margin: EdgeInsets.only(left: _device_width * 0.03),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                      return Center(
+                        child: CupertinoActivityIndicator(),
                       );
                     }
-                    return Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
+                ),
               ),
+              ///제목 TextField
+              Container(
+                height: _device_height * 0.06,
+                width:  _device_width * 0.871,
+                margin: EdgeInsets.only(top: _device_height * 0.026),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color(0xff999999),
+                      width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color(0x80cacaca),
+                        offset: Offset(0, -1),
+                        blurRadius: 16,
+                        spreadRadius: 2)
+                  ],
+                  color: const Color(0xffffffff),
+                ),
+                child: TextField(
+                  controller: _uqpControllerTitle,
+                  decoration: InputDecoration(
+                    counterText: '',
+                    contentPadding:
+                    EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
+                    hintText: '제목을 입력해 주세요',
+                    hintStyle: uqpHintTextStyle,
+                    border: InputBorder.none,
+                  ),
 
-              SizedBox(
-                height: _device_width * (UQP_margin_text/100),
+                ),
               ),
-              ///titleRow
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "제목",
-                    style: TextStyle(
-                      color: const Color(0xff99c8df),
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "NotoSansKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 20,
-                    ), //textAlign: TextAlign.center
+              ///summary 요약
+              Container(
+                height: _device_height * 0.06,
+                width:  _device_width * 0.871,
+                margin: EdgeInsets.only(top: _device_height * 0.026),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color(0xff999999),
+                      width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color(0x80cacaca),
+                        offset: Offset(0, -1),
+                        blurRadius: 16,
+                        spreadRadius: 2)
+                  ],
+                  color: const Color(0xffffffff),
+                ),
+                child: TextField(
+                  controller: _uqpControllerSummarize,
+                  decoration: InputDecoration(
+                    counterText: '',
+                    contentPadding:
+                    EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
+                    hintText: '요약 내용을 입력해 주세요',
+                    hintStyle: uqpHintTextStyle,
+                    border: InputBorder.none,
                   ),
-                  uqpContainer(
-                    margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    deviceWidth: _device_width,
-                    deviceHeight: _device_height,
-                    radius: UQP_radius_textadd,
-                    textEditingController: _uqpControllerTitle,
-                    textInputType: TextInputType.text,
-                    hintText: '제목을 입력해주세요',
 
-                    /*
-                    child: Center(
-                      child: TextField(
-                        controller: _uqpControllerTitle,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          counterText: '',
-                          contentPadding:
-                          EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
-                          hintText: '제목을 입력해 주세요.',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    )
-                      */
-                  ),
-                ],
+                ),
               ),
-              SizedBox(
-                height: _device_width * (UQP_margin_text/100),
-              ),
-              //summaryRow
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "요약",
-                    style: TextStyle(
-                      color: const Color(0xff99c8df),
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "NotoSansKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 20,
-                    ), //textAlign: TextAlign.center
-                  ),
-                  uqpContainer(
-                    margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    deviceWidth: _device_width * (68.8/100),
-                    deviceHeight: _device_height * (UQP_height_text/100),
-                    radius: UQP_radius_textadd,
-                    textEditingController: _uqpControllerSummarize,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: _device_width * (UQP_margin_text/100),
-              ),
-              //contantRow
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "내용",
-                    style: TextStyle(
-                      color: const Color(0xff99c8df),
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "NotoSansKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 20,
-                    ), //textAlign: TextAlign.center
-                  ),
-                  /*
-                  net_Container(
-                    margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    net_width: _device_width * (68.8/100),
-                    net_height: _device_height * (23.0/100),
-                    radius: UQP_radius_textadd,
-                    child: TextField(
-                      controller: _uqpControllerTitle,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        contentPadding:
-                        EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
-                        hintText: '내용을 입력해 주세요.',
-                        border: InputBorder.none,
-                      ),
+              ///contant 내용
+              Container(
+                height: _device_height * 0.278,
+                width:  _device_width * 0.871,
+                margin: EdgeInsets.only(top: _device_height * 0.026),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color: const Color(0xff999999),
+                      width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: const Color(0x80cacaca),
+                        offset: Offset(0, -1),
+                        blurRadius: 16,
+                        spreadRadius: 2)
+                  ],
+                  color: const Color(0xffffffff),
+                ),
+                child: SingleChildScrollView(
+                  child: TextField(
+                    controller: _uqpControllerContents,
+                    decoration: InputDecoration(
+                      counterText: '',
+                      contentPadding:
+                      EdgeInsets.fromLTRB(_device_width * 0.05, 0, 0, 0),
+                      hintText: '게시글을 입력해 주세요',
+                      hintStyle: uqpHintTextStyle,
+                      border: InputBorder.none,
                     ),
-                  ),
 
-                   */
-                ],
-              ),
-              SizedBox(
-                height: _device_width * (UQP_margin_text/100),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [//4.8
-                  Text(
-                    "태그",
-                    style: TextStyle(
-                      color: const Color(0xff99c8df),
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "NotoSansKR",
-                      fontStyle:  FontStyle.normal,
-                      fontSize: 20,
-                    ), //textAlign: TextAlign.center
                   ),
-                  /*
-                  net_Container(
-                    margin: new EdgeInsets.symmetric(horizontal: _device_width * (0.9/100)),
-                    net_width: _device_width * (68.8/100),
-                    net_height: _device_height * (UQP_height_text/100),
-                    radius: UQP_radius_textadd,
-                  ),
-
-                   */
-                ],
+                )
               ),
             ],
           ),
         ),
       ),
-
-      /*
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-                iconSize: 50,
-                color: const Color(0xff46abdb),
-                icon: new Image.asset('images/search_btn_home.png'),
-                onPressed: null),
-            IconButton(
-                iconSize: 50,
-                icon: new Image.asset('images/search_btn_insert_user.png'),
-                onPressed: null),
-            IconButton(
-                iconSize: 50,
-                icon: new Image.asset('images/search_btn_search.png'),
-                onPressed: null),
-            IconButton(
-                iconSize: 50,
-                icon: new Image.asset('images/search_btn_mypage.png'),
-                onPressed: null),
-          ],
-        ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
-       */
 
     );
   }
