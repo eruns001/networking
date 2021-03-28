@@ -36,6 +36,7 @@ dependencies:
   shared_preferences: ^0.5.3+4
   logger: ^0.7.0+2
   intl: ^0.16.1
+  fluttertoast: ^8.0.3
 
   rxdart: ^0.25.0
 

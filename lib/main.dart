@@ -197,24 +197,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return _team;
   }
 
-  /// EditProfilePage 테스트용으로 만든 메서드
-  _createUser() {
-    _user.setProfileImage = Image.asset('images/appbar_btn_alarm.png');
-    _user.setNickName = '바보';
-    _user.setRate = 3.5;
-    _user.setName = '장주환';
-    _user.setPhoneNum = '01012345678';
-    _user.setEmail = 'example@gmail.com';
-    _user.setMajor = 'null';
-    _user.setCareer = '5';
-    _user.setPosition = '청소부';
-    _user.setAddress = '부산광역시';
-
-    /// 팀 테스트 구문
-    _user.setIsJoinedTeam = true;
-    _user.setIsMaster = false;
-    _user.setTeam = _createTeam();
-  }
 
   ///앱 첫실행때 한번 실행되는 함수
   @override
@@ -233,8 +215,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    /// 테스트용
-    _createUser();
 
     /// 페이지들
     List<Widget> _pageList = <Widget>[

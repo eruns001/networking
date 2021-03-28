@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:networking/data/data.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
 import 'package:networking/widget/net_Container.dart';
@@ -76,6 +77,27 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
     }
   }
 
+  bool _toastUQPIsNull() {
+    String nullCase;
+    bool UQPNull = false;
+    if(_uqpControllerTitle.text.length == 0) {nullCase = "제목을 입력해주세요"; UQPNull = true;}
+    else if(_uqpControllerContents.text.length == 0) {nullCase = "내용을 입력해주세요"; UQPNull = true;}
+
+    ///비었을때 Toast
+    if(UQPNull){
+      Fluttertoast.showToast(
+          msg: nullCase,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+
+    return UQPNull;
+  }
   Future _uqpPostUpload() async{
     var now = new DateTime.now();
     String nickName;
@@ -117,8 +139,11 @@ class _UploadQuestionState extends State<UploadQuestionPage> {
                   style: TextStyle( color: const Color(0xff46abdb),),
                 ),
                 onPressed: () async{
-                  await _uqpPostUpload();
-                  Navigator.pop(context);
+                  bool isNull = _toastUQPIsNull();
+                  if(!isNull){
+                    await _uqpPostUpload();
+                    Navigator.pop(context);
+                  }
                 },
             ),
           ),

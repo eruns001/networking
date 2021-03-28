@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:networking/data/class/User.dart';
 import 'package:networking/widget/NetworkingAppBar.dart';
 import 'package:networking/widget/NetworkingDrawer.dart';
-
+/*
 class EditProfilePage extends StatefulWidget {
   EditProfilePage({
     Key key,
@@ -350,3 +350,5 @@ class EditProfileStringInput extends StatelessWidget {
     );
   }
 }
+
+ */

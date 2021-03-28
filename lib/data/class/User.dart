@@ -3,50 +3,45 @@ import 'package:flutter/material.dart';
 import 'Team.dart';
 
 class User {
-  /// 프로필 사진
-  Image _image;
+  User({
+  this.imageUrl,
+  this.nickName,
+  this.name,
+  this.phoneNum,
+  this.email,
+  this.career,
+  this.birth,
+  this.roll,
+  this.position,
+  this.address,
+  });
 
-  /// 닉네임
-  String _nickName;
-
-  /// 별점
-  double _rate;
-
-  /// 이름
-  String _name;
-
-  /// 연락처
-  String _phoneNum;
-
-  /// 이메일
-  String _email;
-
-  /// 분야
-  String _major;
-
-  /// 경력
-  String _career;
-
-  /// 역할
-  String _position;
-
-  /// 주소 시
-  String _address;
-
-  /// 팀에 속해 있는지
-  bool _isJoinedTeam = false;
-
-  /// 팀을 만든 사람인지
-  bool _isMaster = false;
-
-  /// 팀에 대한 정보
-  Team _team;
-
+  ///이미지
+  final String imageUrl;
+  ///닉네임
+  final String nickName;
+  ///이름
+  final String name;
+  ///전화
+  final String phoneNum;
+  ///이메일
+  final String email;
+  ///경력
+  final String career;
+  ///생일
+  final String birth;
+  ///역할
+  final String roll;
+  ///분야
+  final String position;
+  ///주소
+  final String address;
   /// 포트폴리오 추가 필요
   /// 한줄 평 추가 필요 Post 를 확장해서 사용하면 될 듯.
 
+  /*
   /// setter
-  set setProfileImage(Image image) => {_image = image};
+  set setProfileImage(String imageUrl) => {_imageUrl = imageUrl};
   set setNickName(String nickName) => {_nickName = nickName};
   set setRate(double rate) => {_rate = rate};
   set setName(String name) => {_name = name};
@@ -59,19 +54,17 @@ class User {
   set setIsJoinedTeam(bool isJoinedTeam) => {_isJoinedTeam = isJoinedTeam};
   set setIsMaster(bool isMaster) => {_isMaster = isMaster};
   set setTeam(Team team) => {_team = team};
+   */
 
   /// getter
-  get getProfileImage => _image;
-  get getNickName => _nickName;
-  get getRate => _rate;
-  get getName => _name;
-  get getPhoneNum => _phoneNum;
-  get getEmail => _email;
-  get getMajor => _major;
-  get getCareer => _career;
-  get getPosition => _position;
-  get getAddress => _address;
-  get getIsJoinedTeam => _isJoinedTeam;
-  get getIsMaster => _isMaster;
-  get getTeam => _team;
+  get getImageUrl => imageUrl;
+  get getNickName => nickName;
+  get getName => name;
+  get getPhoneNum => phoneNum;
+  get getEmail => email;
+  get getCareer => career;
+  get getBirth => birth;
+  get getRoll => roll;
+  get getPosition => position;
+  get getAddress => address;
 }

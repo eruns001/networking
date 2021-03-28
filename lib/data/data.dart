@@ -5,6 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'class/User.dart';
+
+//로그인 유저
+User userNow;
 
 //UploadQuestionPage - uqp
 final double UQP_radius_picadd = 20;

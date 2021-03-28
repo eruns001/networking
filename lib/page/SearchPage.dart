@@ -1,3 +1,5 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:networking/data/data.dart';
@@ -251,3 +253,32 @@ Widget temp(_device_width, _device_height) {
     ),
   );
 }
+/*
+Widget searchItem(String dropdownValueNumber, int limitNum) {
+  int dropDownVal = int.parse(dropdownValueNumber);
+  CollectionReference postRef = Firestore.instance.collection('uqpPost');
+  Query first = postRef.orderBy('Time').limit(limitNum);
+
+  //first.getDocuments().asStream();
+  //Query next =  first.startAfter(first.getDocuments()); //postRef.orderBy('Time').startAfter(first.snapshots().last);
+
+  DocumentSnapshot documentSnapshot;
+
+  return StreamBuilder(
+    stream: first.snapshots(),
+    builder: ( context, snapshot){
+      if(!snapshot.hasData){
+        return CircularProgressIndicator();
+      }
+      List<DocumentSnapshot> documents = snapshot.data.documents;
+      return ListView(
+        padding:EdgeInsets.only(top: 20.0),
+        children: documents.map((e) => null),
+      );
+      //children: documents.map((eachDocument) => DocumentView(eachDocument)).toList(),);
+    },
+  );
+
+}
+
+ */

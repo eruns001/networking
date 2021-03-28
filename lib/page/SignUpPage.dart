@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:networking/data/data.dart';
 import 'package:networking/data/function.dart';
 import 'package:networking/widget/net_Container.dart';
@@ -64,6 +66,51 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController _pwController = new TextEditingController();
   TextEditingController _pwConfirmController = new TextEditingController();
 
+
+  ///빈 란이 있는지 채크
+  bool _toastSignUpIsNull() {
+    String nullCase;
+    bool SignUpNull = false;
+    if(_nickNameController.text.length == 0) {nullCase = "닉네임"; SignUpNull = true;}
+    else if(_nameController.text.length == 0) {nullCase = "이름"; SignUpNull = true;}
+    else if(_contactController.text.length == 0) {nullCase = "연락처"; SignUpNull = true;}
+    else if(_emailController.text.length == 0) {nullCase = "이메일"; SignUpNull = true;}
+
+    ///비었을때 Toast
+    if(SignUpNull){
+      Fluttertoast.showToast(
+          msg: "$nullCase을(를) 입력해주세요",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+
+    return SignUpNull;
+  }
+
+  ///업로드
+  Future _SignUpPageUpload() async{
+    IsLogIn = true;
+    ///firebase에 입력
+    String document = "$uid";
+    await Firestore.instance.collection('Account').document(document).setData({
+      'imageUrl' : _imageUrlController,
+      'nickName': _nickNameController.text,
+      'name': _nameController.text,
+      'contact' : _contactController.text,
+      'birth':_birthController.text,
+      'address':_addressController,
+      'e_mail':_emailController.text,
+      'career': _careerController.text,
+      'roll':_roleController,
+      'position':positionController,
+    });
+
+  }
   /// 페이지 내용 빌드 메서드
   Widget _buildPage(double _deviceHeight, double _deviceWidth) {
     return ListView(
@@ -402,24 +449,12 @@ class _SignUpPageState extends State<SignUpPage> {
               padding: EdgeInsets.zero,
               child: Image.asset('images/signUp_btn_next.png'),
               onPressed: () async {
-                IsLogIn = true;
 
-                ///firebase에 입력
-                String document = "$uid";
-                print("nickname : ${_nickNameController.text}");
-                await Firestore.instance.collection('Account').document(document).setData({
-                  'imageUrl' : _imageUrlController,
-                  'nickName': _nickNameController.text,
-                  'name': _nameController.text,
-                  'contact' : _contactController.text,
-                  'birth':_birthController.text,
-                  'address':_addressController,
-                  'e_mail':_emailController.text,
-                  'career': _careerController.text,
-                  'roll':_roleController,
-                  'position':positionController,
-                });
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
+                bool isNull = _toastSignUpIsNull();
+                if(!isNull){
+                  await _SignUpPageUpload();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyHomePage()));
+                }
               },
             ),
           ),

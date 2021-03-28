@@ -10,6 +10,8 @@ import 'dart:io';
 
 import 'package:networking/page/SearchPage.dart';
 
+import 'class/User.dart';
+
 Future<String> network_function_getImage(String where, int _counter) async{
   File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
@@ -121,7 +123,7 @@ void IsLogin() {
 
 
 ///init
-Future<bool> setuid()async{
+Future<bool> setuid() {
   print("setuid");
   FirebaseAuth.instance.currentUser().then((value) {
     print("from function value : ${value}");
@@ -129,8 +131,25 @@ Future<bool> setuid()async{
     print("from function basicImageUrl : ${basicImageUrl}");
     uid = value.uid;
   });
+  Firestore.instance.collection('Account').document(uid).get()
+      .then((DocumentSnapshot ds) {
+    userNow = User(
+      imageUrl: ds.data['imageUrl'],
+      nickName: ds.data['nickName'],
+      name: ds.data['name'],
+      phoneNum: ds.data['contact'],
+      email: ds.data['e_mail'],
+      career: ds.data['career'],
+      birth: ds.data['birth'],
+      roll: ds.data['roll'],
+      position: ds.data['position'],
+      address: ds.data['address'],
+    );
+  });
   return Future<bool>.value(true);
 }
+///init Login UserData 로그인 유저 데이터 입력
+
 
 ///SearchPage
 List<String> setPositionList(Role) {
